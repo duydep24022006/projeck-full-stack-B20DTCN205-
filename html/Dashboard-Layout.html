@@ -17,7 +17,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" href="../css/Dashboard-Layout.css" />
+    <link rel="stylesheet" href="./css/Dashboard-Layout.css" />
   </head>
   <body>
     <div class="frame">
@@ -48,6 +48,7 @@
               />
             </button>
           </div>
+          
         </div>
       </div>
       <div class="frame-container">
@@ -55,6 +56,14 @@
           <div class="frame-container-background">
             <div class="background-container">
               <div class="background-container-top">
+                <div class="top-trello">
+                  <img
+                    src="../assets/icon/trello-logo-full.png .svg"
+                    alt="..."
+                    width="80"
+                    height="16.35"
+                  />
+                </div>
                 <h6>Your workspaces</h6>
                 <div class="top-boards">
                   <img
@@ -65,6 +74,7 @@
                   />
                   <p id="Boards">Boards</p>
                 </div>
+                
                 <div class="top-starred">
                   <img
                     src="../assets/icon/Starred Boards.svg"
@@ -125,14 +135,12 @@
                   </div>
 
                   <div class="week">
-                    
                     <select>
                       <option value="this-week">This week</option>
                       <option value="last-week">Last week</option>
                       <option value="this-month">This month</option>
                       <option value="last-month">Last month</option>
                     </select>
-                    
                   </div>
                 </div>
               </div>
@@ -155,6 +163,8 @@
                   />
                   <button id="boardsTitle">Board title 01</button>
                 </div>
+                
+                
                 <div class="createBoard">
                   <img
                     src="../assets/img/backgr3.png"
@@ -176,11 +186,40 @@
                 <div class="createNewBoard">
                   <button id="NewBoard">Create new board</button>
                 </div>
-                <img src="" alt="" />
               </div>
             </div>
             <div class="main-starredBoards">
-                
+              <div class="main-starredBoards">
+                <div class="main-starredBoards-top">
+                  <img
+                    src="../assets/icon/starmain.svg"
+                    width="32"
+                    height="32"
+                    alt="..."
+                  />
+                  <h2>Starred Boards</h2>
+                </div>
+              </div>
+              <div class="main-starredBoards-bottom">
+                <div class="createBoard">
+                  <img
+                    src="../assets/img/backgr5.png"
+                    width="270"
+                    height="130"
+                    alt="..."
+                  />
+                  <button id="importantBoard">Important Board 01</button>
+                </div>
+                <div class="createBoard">
+                  <img
+                    src="../assets/img/backgr6.png"
+                    width="270"
+                    height="130"
+                    alt="..."
+                  />
+                  <button id="importantBoard">Important Board 02</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
