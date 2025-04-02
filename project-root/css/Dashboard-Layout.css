@@ -6,7 +6,10 @@ body {
     font-style: normal;
     font-family: Arial, sans-serif;
     padding-top: 48px;
-
+    
+}
+h2 {
+    font-size: 24px !important;
 }
 .frame{
     max-width: 1440px;
@@ -229,11 +232,159 @@ body {
         color:#6C757D;
     }
 }
+.Modal-Create-new-board {
+    position: absolute;
+    width: 498px;
+    height: 540px;  
+    top:59px;
+    left:471px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow:0px 0px 10px rgba(0, 0, 0, 0.2);
+    z-index: 13;
+    display: none;
+}
+.Modal-Create-new-board .top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #cccc;
+    height: 60px;
+}
+.Modal-Create-new-board .top h2{
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    color: #212529;
+    padding-top: 16px;
+    padding-left: 16px;
+}
+#exitBtn{
+    margin-right: 15px;
+}
+#exitBtn:hover {
+    margin-right: 15px;
+    font-size: 25px !important;
+}
+.Modal-Create-new-board .top #exitBtn{
+    opacity: 0.5;
+    border: none;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #6C757D;
+}
+.conten{
+    padding-top: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+}
+.Color,.Board-title ,.footer {
+    padding-top: 16px;
+    font-weight: 500;
+    font-size: 20px !important;
+    line-height: 24px;
+}
+.conten .Background-container,.Color .Color-container{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    border-bottom: 1px solid #cccc;
+    padding-bottom: 16px;
+}
+.Background-container .Background-item{
+    width: 108.5px;
+    height: 60px;
+    border-radius: 5px;
+    position: relative;
+    
+    img{
+        position: absolute;
+        top: 22px;
+        left: 46.25px;
+    }
+}
+
+.Background-container .Background-item1{
+    background: url("../assets/img/backgr1.png") no-repeat center;
+    background-size: cover;
+}
+.Background-container .Background-item2{
+    background: url("../assets/img/backgr2.png") no-repeat center;
+    background-size: cover;
+}
+.Background-container .Background-item3{
+    background: url("../assets/img/backgr3.png") no-repeat center;
+    background-size: cover;
+}
+.Background-container .Background-item4{
+    background: url("../assets/img/backgr4.png") no-repeat center;
+    background-size: cover;
+}
+.Color-container .Color-item {
+    width: 69.66000366210938px;
+    height: 40px;
+    border-radius: 5px;
+    position: relative;
+
+    img {
+        position: absolute;
+        top: 12px;
+        left: 26.83px;
+    }
+}
+.Color-container .Color-item1 { background: linear-gradient(to bottom right, #ffb100, #fa0c00); }
+.Color-container .Color-item2 { background: linear-gradient(to bottom right, #2609ff, #d20cff); }
+.Color-container .Color-item3 { background: linear-gradient(to bottom right, #00ff2f, #00ffc8); }
+.Color-container .Color-item4 { background: linear-gradient(to bottom right, #00ffe5, #004bfa); }
+.Color-container .Color-item5 { background: linear-gradient(to bottom right, #ff00c8, #ff00a0); }
+.Color-container .Color-item6 { background: linear-gradient(to bottom right, #ff00ea, #fa0c00); }
+
+.Background-container .Background-item:hover, .Color-container .Color-item:hover{
+    transform: scale(1.07);
+    transition: transform 0.3s ease-in-out;
+}
+.Board-title{
+    border-bottom: 1px solid #cccc;
+}
+.Board-title h2{
+    position: relative;
+    img{
+        position: absolute;
+        top: 10px;
+        left: 113px;
+    }
+}
+.Board-title input{
+    width: 464px;
+    height: 56px;
+    border-radius: 6px;
+    border: 1px solid #6C757D;
+    padding-left: 16px;
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
+.footer{
+    text-align: end;
+}
 .main-boards-bottom .createNewBoard:hover,.main-boards-bottom .createBoard:hover, .main-starredBoards-bottom .createNewBoard:hover,.main-starredBoards-bottom .createBoard:hover{
     transform: scale(1.05);
     transition: transform 0.3s ease-in-out;
 }
-
+body.body-color::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(128, 128, 128, 0.5);
+    z-index: 12;
+}
 @media screen and (max-width:577px) {
     body {
     padding-top: 48px;
@@ -429,15 +580,10 @@ body {
             color:#6C757D;
         }
     }
-    
+   .Modal-Create-new-board {
+       position: absolute;
+       top: 60px;
+       left: 39px;
+   }
 }
-body.body-color::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(128, 128, 128, 0.5);
-    z-index: 15;
-}
+

@@ -19,7 +19,7 @@
     />
     <link rel="stylesheet" href="./css/Dashboard-Layout.css" />
   </head>
-  <body >
+  <body>
     <div class="frame">
       <div id="frame-header"></div>
       <div class="frame-container">
@@ -139,6 +139,7 @@
                   <img
                     src="./assets/img/backgr3.png"
                     width="270"
+                    ;
                     height="130"
                     alt="..."
                   />
@@ -159,16 +160,14 @@
               </div>
             </div>
             <div class="main-starredBoards">
-              <div class="main-starredBoards">
-                <div class="main-starredBoards-top">
-                  <img
-                    src="./assets/icon/starmain.svg"
-                    width="32"
-                    height="32"
-                    alt="..."
-                  />
-                  <h2>Starred Boards</h2>
-                </div>
+              <div class="main-starredBoards-top">
+                <img
+                  src="./assets/icon/starmain.svg"
+                  width="32"
+                  height="32"
+                  alt="..."
+                />
+                <h2>Starred Boards</h2>
               </div>
               <div class="main-starredBoards-bottom">
                 <div class="createBoard">
@@ -191,6 +190,117 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="Modal-Create-new-board">
+        <div class="top">
+          <h2>Create board</h2>
+          <i class="fa-solid fa-x" id="exitBtn"></i>
+        </div>
+        <div class="conten">
+          <div class="Background">
+            <h2>Background</h2>
+            <div class="Background-container">
+              <div class="Background-item Background-item1">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Background-item Background-item2">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Background-item Background-item3">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Background-item Background-item4">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+            </div>
+          </div>
+          <div class="Color">
+            <h2>Color</h2>
+            <div class="Color-container">
+              <div class="Color-item Color-item1">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Color-item Color-item2">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Color-item Color-item3">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Color-item Color-item4">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Color-item Color-item5">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Color-item Color-item6">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+            </div>
+            <div class="Board-title">
+              <h2>Board title <img src="./assets/icon/hoathi.svg"  alt=""></h2>
+              <input
+                type="text"
+                placeholder="E.g. Shopping list for birthday..."
+                id="Board-title-input"
+              />
+              <p>👋 Please provide a valid board title.</p>
+            </div>
+          </div>
+          <div class="footer">
+            <button type="button" class="btn btn-outline-danger" id="board-close">Close</button>
+            <button type="button" class="btn btn-outline-primary" id="board-create">Create</button>
           </div>
         </div>
       </div>

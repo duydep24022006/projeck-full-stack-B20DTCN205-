@@ -17,8 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 document.querySelector(".top-trello").addEventListener("click", toggleMenu);
 function toggleMenu() {
-
-
   let frameContainerBackground = document.querySelector(
     ".frame-container-background"
   );
@@ -39,4 +37,24 @@ function toggleMenu() {
   }
 }
 
+document.getElementById("NewBoard").addEventListener("click", toggleNewBoard);
+function toggleNewBoard() {
+  let ModalBoard = document.querySelector(".Modal-Create-new-board");
+  let body = document.body;
+  if (ModalBoard.style.display === "none" || ModalBoard.style.display === "") {
+    ModalBoard.style.display = "block";
+    body.classList.add("body-color");
+  }
+}
 
+document.getElementById("exitBtn").addEventListener("click", hideNewBoard);
+document.getElementById("board-close").addEventListener("click", hideNewBoard);
+
+function hideNewBoard() {
+  let ModalBoard = document.querySelector(".Modal-Create-new-board");
+  let body = document.body;
+  if (window.getComputedStyle(ModalBoard).display !== "none") {
+    ModalBoard.style.display = "none";
+    body.classList.remove("body-color");
+  }
+}
