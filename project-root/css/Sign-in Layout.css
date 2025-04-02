@@ -14,12 +14,7 @@ body{
     margin-top: 106.43px;
     position: relative;
 }
-.containerLogin{
-    display: block;
-}
-.containerRegister{
-    display: none;
-}
+
 .containerLogin img , .containerRegister img{
     display: block;
     margin: 0 auto;
