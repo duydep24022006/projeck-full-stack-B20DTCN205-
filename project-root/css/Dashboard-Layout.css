@@ -198,7 +198,7 @@ h2 {
         border-radius: 5px;
         width: 256px;
     }
-    button{
+    #boardsTitle ,#importantBoard{
         position: absolute;
         top: 15px;
         left: 15px;
@@ -209,6 +209,23 @@ h2 {
         line-height: 24px;
         color: #FFFFFF;
     }
+    #EditThisBoard {
+        position: absolute;
+        width: 168px;
+        height: 32px;
+        top: 85px;
+        left: 15px;
+        border: none;
+        background-color: #2C3E5D;
+        font-weight: 500;
+        font-size: 18.44px;
+        line-height: 24px;
+        color: #FFFFFF;
+        img{
+            width: 16px;
+        }
+    }
+
     
 }
 .main-boards-bottom .createNewBoard, .main-starredBoards-bottom .createNewBoard{
@@ -258,6 +275,9 @@ h2 {
     color: #212529;
     padding-top: 16px;
     padding-left: 16px;
+}
+.create-mode,.update-mode{
+    display: inline-block;
 }
 #exitBtn{
     margin-right: 15px;

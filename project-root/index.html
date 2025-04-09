@@ -29,7 +29,7 @@
               <div class="background-container-top">
                 <div class="top-trello">
                   <img
-                    src="./assets/icon/trello-logo-full.png .svg"
+                    src="https://s3-alpha-sig.figma.com/img/5543/fa15/ec2bf2848bcc7e055bf7365b9ab61012?Expires=1744588800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Brw-DXRCYHlNwAsyo7Y3VRolkde-MDbEMGak-Rq~C2TmTsvyOPYqGb4ryWulsks-0xX985r6KbNL3JEuv0iRmMDk0Kst0Nk08xtvuAq-BOgUTJeXn-NgoNBU6liOO6Cv5PKHymxfo~Ey9yYgK11FY3Tr5W7Eo~hLxkA4UJ0MNsX9NNh3N05tWIGmqXko7Awtnl7V~hRt1vRaH9paquoriUVzBEECSpEFEaLqJ8YuJNqUaRKjms5b8beZhdY0Jnbxkgd-Gk7tEeXMGhBOdcl2JDh40UccjscpqUJ4FGomUhZqpa1q0MRmGL-kGtzfx7u7-lmrH0642UpHg72xAQvnjA__"
                     alt="..."
                     width="80"
                     height="16.35"
@@ -75,7 +75,7 @@
                   />
                   <p id="settings">Settings</p>
                 </div>
-                <div class="bottom-signOut">
+                <div class="bottom-signOut" id="signOutBtn">
                   <img
                     src="./assets/icon/Sign out.svg"
                     width="16"
@@ -116,47 +116,7 @@
                 </div>
               </div>
               <div class="main-boards-bottom">
-                <div class="createBoard">
-                  <img
-                    src="./assets/img/backgr1.png"
-                    width="270"
-                    height="130"
-                    alt="..."
-                  />
-                  <button id="boardsTitle">Board title 01</button>
-                </div>
-                <div class="createBoard">
-                  <img
-                    src="./assets/img/backgr2.png"
-                    width="270"
-                    height="130"
-                    alt="..."
-                  />
-                  <button id="boardsTitle">Board title 01</button>
-                </div>
-
-                <div class="createBoard">
-                  <img
-                    src="./assets/img/backgr3.png"
-                    width="270"
-                    ;
-                    height="130"
-                    alt="..."
-                  />
-                  <button id="boardsTitle">Board title 01</button>
-                </div>
-                <div class="createBoard">
-                  <img
-                    src="./assets/img/backgr4.png"
-                    width="270"
-                    height="130"
-                    alt="..."
-                  />
-                  <button id="boardsTitle">Board title 01</button>
-                </div>
-                <div class="createNewBoard">
-                  <button id="NewBoard">Create new board</button>
-                </div>
+                
               </div>
             </div>
             <div class="main-starredBoards">
@@ -169,33 +129,15 @@
                 />
                 <h2>Starred Boards</h2>
               </div>
-              <div class="main-starredBoards-bottom">
-                <div class="createBoard">
-                  <img
-                    src="./assets/img/backgr5.png"
-                    width="270"
-                    height="130"
-                    alt="..."
-                  />
-                  <button id="importantBoard">Important Board 01</button>
-                </div>
-                <div class="createBoard">
-                  <img
-                    src="./assets/img/backgr6.png"
-                    width="270"
-                    height="130"
-                    alt="..."
-                  />
-                  <button id="importantBoard">Important Board 02</button>
-                </div>
-              </div>
+              <div class="main-starredBoards-bottom"></div>
             </div>
           </div>
         </div>
       </div>
       <div class="Modal-Create-new-board">
         <div class="top">
-          <h2>Create board</h2>
+          <h2 class="create-mode">Create board</h2>
+          <h2 class="update-mode">Update board</h2>
           <i class="fa-solid fa-x" id="exitBtn"></i>
         </div>
         <div class="conten">
@@ -289,7 +231,7 @@
               </div>
             </div>
             <div class="Board-title">
-              <h2>Board title <img src="./assets/icon/hoathi.svg"  alt=""></h2>
+              <h2>Board title <img src="./assets/icon/hoathi.svg" alt="" /></h2>
               <input
                 type="text"
                 placeholder="E.g. Shopping list for birthday..."
@@ -299,8 +241,27 @@
             </div>
           </div>
           <div class="footer">
-            <button type="button" class="btn btn-outline-danger" id="board-close">Close</button>
-            <button type="button" class="btn btn-outline-primary" id="board-create">Create</button>
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              id="board-close"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary create-mode"
+              id="board-create"
+            >
+              Create
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary update-mode"
+              id="board-Save"
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>

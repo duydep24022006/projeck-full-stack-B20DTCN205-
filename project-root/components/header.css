@@ -44,8 +44,6 @@ body {
 }
 
 
-
-/* Responsive cho mobile */
 @media (max-width: 577px) {
     .trello-header {
         width: 576px;

@@ -117,14 +117,21 @@ body{
     position: absolute;
     top: 22px;
 }
-.messengerLogin-error{
-    display: none;
+.messengerLogin-error {
     background-color: #FFE5E8;
     width: 299px;
-    height: 106px;
+    height: auto;
     margin-bottom: 20px;
     border-radius: 10px;
     padding: 16px;
+    opacity: 0;
+    transition: opacity 1s ease-out;
+    visibility: hidden;
+}
+
+.messengerLogin-error.show {
+    opacity: 1;
+    visibility: visible;
 }
 .error-top{
     display: flex;
@@ -166,6 +173,12 @@ body{
     display: flex;
     padding: 16px 16px 18px 16px;
     border-radius: 10px;
-    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    visibility: hidden; 
+}
+.messengerLogin-Success.show {
+    opacity: 1;
+    visibility: visible;
 }
 

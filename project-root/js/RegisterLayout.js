@@ -59,57 +59,62 @@ function validatePassword(password) {
 function validateUsername(username) {
   return username.length >= 3;
 }
-function validateLogin() {
-  const users = getData("users");
-  const email = document.getElementById("emailInput").value;
-  const password = document.getElementById("passwordInput").value;
-  const existingUser = users.find((user) => user.email === email);
 
-  if (email === "" || password === "") {
+function validateForm() {
+  let flag = 1;
+  let users = getData("users");
+  const email = document.getElementById("emailInput").value;
+  const username = document.getElementById("userNameInput").value;
+  const password = document.getElementById("passwordInput").value;
+
+  if (!email || !username || !password) {
     showNotification("");
     return false;
   }
   if (!validateEmail(email)) {
-    showNotification("Email không hợp lệ.");
+    showNotification("Email không hợp lệ!");
+    document.getElementById("emailInput").value = "";
+    document.getElementById("userNameInput").value = "";
+    document.getElementById("passwordInput").value = "";
+    return false;
+  }
+  if (!validateUsername(username)) {
+    showNotification("tên đăng nhập không hợp lệ!");
+    document.getElementById("emailInput").value = "";
+    document.getElementById("userNameInput").value = "";
+    document.getElementById("passwordInput").value = "";
     return false;
   }
   if (!validatePassword(password)) {
-    showNotification("Mật khẩu không hợp lệ.");
-    return false;
-  }
+    showNotification("Mât khẩu không hợp lệ!");
 
-  if (!existingUser) {
-    showNotification("Email không tồn tại.");
     document.getElementById("emailInput").value = "";
+    document.getElementById("userNameInput").value = "";
     document.getElementById("passwordInput").value = "";
     return false;
   }
 
-  if (existingUser.password !== password) {
-    document.getElementById("passwordInput").value = "";
-    showNotification("Mật khẩu không đúng.");
+  const existingUser = users.find((user) => user.email === email);
+  if (existingUser) {
+    email.value = "";
+    username.value = "";
+    password.value = "";
+    showNotification("Emall đã tồn tại!");
     return false;
   }
-  setData("currentUser", existingUser);
+
+  const newUser = {
+    id: Date.now() + Math.floor(Math.random()),
+    username: username,
+    email: email,
+    password: password,
+    created_at: new Date().toISOString(),
+    boards: [],
+  };
+  users.push(newUser);
+  setData("users", users);
   showNotificationSuccess();
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
-  Toast.fire({
-    icon: "success",
-    title: "Signed in successfully",
-  }).then(() => {
-    window.location.href = "../index.html";
-  });
-
+  window.location.href = "./Sign-inLayout.html";
   return true;
 }
 
@@ -128,9 +133,11 @@ function showNotification(mess) {
     console.error("Không tìm thấy errorMessChild!");
     return;
   }
-
   errorMessChild.innerHTML =
-    mess || `Mật khẩu không được bỏ trống </br>Email không được bỏ trống`;
+    mess ||
+    `Mật khẩu không được bỏ trống </br>
+    hoặc Tên người dùng không được bỏ trống</br>
+    hoặc Email không được bỏ trống`;
   messengerErrorContainer.style.visibility = "visible";
   messengerErrorContainer.style.opacity = "1";
   messengerErrorContainer.classList.add("show");
@@ -143,6 +150,7 @@ function showNotification(mess) {
     }, 1000);
   }, 3000);
 }
+
 function showNotificationSuccess() {
   const notification = document.getElementsByClassName(
     "messengerLogin-Success"
@@ -188,5 +196,7 @@ document
   .addEventListener("click", hiddenmessengerError);
 
 window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("signBtn").addEventListener("click", validateLogin);
+  document
+    .getElementById("registerBtn")
+    .addEventListener("click", validateForm);
 });
