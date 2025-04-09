@@ -13,6 +13,7 @@ const data = {
           description: "Quản lý tiến độ dự án website", // Mô tả bảng
           backdrop:
             "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/640px-Cat_August_2010-4.jpg", // Hình nền bảng
+          color: "linear-gradient(to bottom right, #ffb100, #fa0c00)",
           is_starred: false, // Đánh dấu bảng là yêu thích (starred)
           created_at: "2025-02-28T12:30:00Z", // Thời gian tạo bảng
           lists: [
@@ -104,7 +105,7 @@ function renderBoards() {
                     alt="..."
                   />
                   <button id="boardsTitle">${board.title}</button>
-                  <button id="EditThisBoard" data-index="${index}">
+                  <button id="EditThisBoard" onclick="editBoard(${index})">
                     <span
                       ><img
                         src="./assets/icon/Vector (1).svg"
@@ -123,29 +124,9 @@ function renderBoards() {
   });
   const htmlNewBoard = `
           <div class="createNewBoard">
-                  <button id="NewBoard">Create new board</button>
+                  <button id="NewBoard" onclick="toggleNewBoard()">Create new board</button>
                 </div>`;
   document.querySelector(".main-boards-bottom").innerHTML += htmlNewBoard;
-
-  document.addEventListener("DOMContentLoaded", function () {
-    // Bắt sự kiện khi click nút Edit (dùng event delegation)
-    document.body.addEventListener("click", function (e) {
-      const newBoardBtn = e.target.closest("#NewBoard");
-      if (newBoardBtn) {
-        console.log(" Tạo board mới");
-        return;
-      }
-      const editBtn = e.target.closest(".EditThisBoard");
-      if (editBtn) {
-        const index = Number(editBtn.dataset.index);
-        console.log("Vị trí board được click:", index);
-      }
-    });
-    renderBoards();
-  });
-}
-function addBoard() { 
-  let 
 }
 
 document.querySelector(".top-trello").addEventListener("click", toggleMenu);
@@ -170,11 +151,8 @@ function toggleMenu() {
   }
 }
 
-document.getElementById("NewBoard").addEventListener("click", toggleNewBoard);
-document
-  .getElementById("EditThisBoard")
-  .addEventListener("click", toggleEditBoard);
 function toggleNewBoard() {
+  console.log("Create new board");
   let ModalBoard = document.querySelector(".Modal-Create-new-board");
   let body = document.body;
   if (ModalBoard.style.display === "none" || ModalBoard.style.display === "") {
@@ -186,9 +164,23 @@ function toggleNewBoard() {
       el.style.display = "inline-block";
     });
     body.classList.add("body-color");
+  } else {
+    console.log("Hide this board");
+
+    ModalBoard.style.display = "none";
+    document.querySelectorAll(".update-mode ").forEach((el) => {
+      el.style.display = "none";
+    });
+    document.querySelectorAll(".create-mode").forEach((el) => {
+      el.style.display = "inline-block";
+    });
+    body.classList.add("body-color");
   }
 }
+
 function toggleEditBoard() {
+  console.log("Edit this board");
+
   let ModalBoard = document.querySelector(".Modal-Create-new-board");
 
   let body = document.body;
@@ -204,7 +196,6 @@ function toggleEditBoard() {
   }
 }
 let board = getData("currentUser");
-console.log("q" + board.boards);
 
 function deleteBoard(index) {
   let board = getData("currentUser").users.name.boards;
@@ -218,6 +209,65 @@ function hideNewBoard() {
     body.classList.remove("body-color");
   }
 }
+let imgInput = "./assets/img/backgr1.png";
+function changeBackgroundImg(img) {
+  if (!img) {
+    imgInput = "./assets/img/backgr1.png";
+  } else {
+    imgInput = img;
+  }
+  console.log(imgInput);
+}
+let colorInput = "linear-gradient(to bottom right, #ffb100, #fa0c00)";
+function changeColor(color) {
+  if (!color) {
+    colorInput = "linear-gradient(to bottom right, #ffb100, #fa0c00)";
+  } else {
+    colorInput = color;
+  }
+}
 
+function clearInput() {
+  document.getElementById("Board-title-input").value = ""; // Xóa giá trị trong ô nhập tiêu đề
+  document.getElementById("messError").style.display = "none"; // Ẩn thông báo lỗi
+  imgInput = "./assets/img/backgr1.png"; // Đặt lại hình nền mặc định
+  colorInput = "linear-gradient(to bottom right, #ffb100, #fa0c00)"; // Đặt lại màu sắc mặc định
+}
+function newBoard() {
+  console.log(imgInput, colorInput);
+
+  let titleName = document.getElementById("Board-title-input").value; // Lấy giá trị tiêu đề từ input
+
+  // Kiểm tra xem tiêu đề có hợp lệ không
+  if (!titleName) {
+    document.getElementById("messError").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("messError").style.display = "none";
+    }, 3000);
+    return;
+  }
+  let newBoard = {
+    id: Date.now() + Math.floor(Math.random()), // ID của bảng (board)
+    title: titleName, // Tiêu đề bảng
+    description: "Quản lý tiến độ dự án website", // Mô tả bảng
+    backdrop: imgInput,
+    color: colorInput,
+    is_starred: false,
+    created_at: new Date().toISOString(),
+    lists: [],
+  };
+  console.log(board.boards);
+  board.boards.push(newBoard);
+  hideNewBoard();
+  clearInput();
+  setData("currentUser", board); // Lưu lại dữ liệu vào localStorage
+  setData("users", board); // Lưu lại dữ liệu vào localStorage
+  renderBoards(); // Cập nhật giao diện hiển thị các bảng
+}
+
+function editBoard(index) {
+  toggleEditBoard();
+}
+document.getElementById("board-create").addEventListener("click", newBoard);
 document.getElementById("exitBtn").addEventListener("click", hideNewBoard);
 document.getElementById("board-close").addEventListener("click", hideNewBoard);

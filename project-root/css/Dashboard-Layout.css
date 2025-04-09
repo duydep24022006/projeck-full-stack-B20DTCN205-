@@ -388,6 +388,10 @@ h2 {
     margin-top: 8px;
     margin-bottom: 5px;
 }
+#messError{
+    display: none;
+    color: red;
+}
 .footer{
     text-align: end;
 }
