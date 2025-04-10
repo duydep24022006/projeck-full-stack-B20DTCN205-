@@ -60,7 +60,8 @@ function validateUsername(username) {
   return username.length >= 3;
 }
 function validateLogin() {
-  const users = getData("users");
+  let usersData = getData("users");
+  let users = Array.isArray(usersData) ? usersData : usersData.users || [];
   const email = document.getElementById("emailInput").value;
   const password = document.getElementById("passwordInput").value;
   const existingUser = users.find((user) => user.email === email);
@@ -70,16 +71,16 @@ function validateLogin() {
     return false;
   }
   if (!validateEmail(email)) {
-    showNotification("Email không hợp lệ.");
+    showNotification("");
     return false;
   }
   if (!validatePassword(password)) {
-    showNotification("Mật khẩu không hợp lệ.");
+    showNotification("");
     return false;
   }
 
   if (!existingUser) {
-    showNotification("Email không tồn tại.");
+    showNotification("");
     document.getElementById("emailInput").value = "";
     document.getElementById("passwordInput").value = "";
     return false;
@@ -87,10 +88,11 @@ function validateLogin() {
 
   if (existingUser.password !== password) {
     document.getElementById("passwordInput").value = "";
-    showNotification("Mật khẩu không đúng.");
+    showNotification("");
     return false;
   }
   setData("currentUser", existingUser);
+  setData("users", users);
   showNotificationSuccess();
   const Toast = Swal.mixin({
     toast: true,
@@ -130,7 +132,7 @@ function showNotification(mess) {
   }
 
   errorMessChild.innerHTML =
-    mess || `Mật khẩu không được bỏ trống </br>Email không được bỏ trống`;
+    mess || `Mật khẩu không hợp lệ! </br>Email không hợp lệ!`;
   messengerErrorContainer.style.visibility = "visible";
   messengerErrorContainer.style.opacity = "1";
   messengerErrorContainer.classList.add("show");
@@ -180,8 +182,21 @@ function setData(name, data) {
   localStorage.setItem(name, JSON.stringify(data));
 }
 
+
 function getData(name) {
-  return JSON.parse(localStorage.getItem(name)) || data.users;
+  const stored = JSON.parse(localStorage.getItem(name));
+
+  // Nếu stored là object có thuộc tính users → lấy stored.users
+  if (stored && stored.users) {
+    return stored.users;
+  }
+
+  // Nếu stored là mảng → trả trực tiếp
+  if (Array.isArray(stored)) {
+    return stored;
+  }
+  // Mặc định trả về data.users nếu không có gì
+  return data.users;
 }
 document
   .getElementById("BaseCloseButton")

@@ -61,8 +61,8 @@ function validateUsername(username) {
 }
 
 function validateForm() {
-  let flag = 1;
-  let users = getData("users");
+  let usersData = getData("users");
+  let users = Array.isArray(usersData) ? usersData : usersData.users || [];
   const email = document.getElementById("emailInput").value;
   const username = document.getElementById("userNameInput").value;
   const password = document.getElementById("passwordInput").value;

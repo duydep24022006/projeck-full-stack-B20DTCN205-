@@ -1,21 +1,32 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang chính</title>
-</head>
-<body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- textarea để CKEditor biến thành trình soạn thảo -->
+    <textarea id="editor"></textarea>
+    <button onclick="handleGetValue()">Click</button>
 
-    <div id="header"></div> <!-- Header sẽ được import vào đây -->
+    <!-- Thêm script CKEditor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script>
+      let myEditor;
+      document.addEventListener("DOMContentLoaded", function () {
+        ClassicEditor.create(document.querySelector("#editor"))
+          .then((editor) => {
+            myEditor = editor;
+          })
+          .catch((error) => {
+            console.error("Có lỗi xảy ra khi khởi tạo CKEditor:", error);
+          });
+      });
 
-    <main>
-        <h1>Chào mừng đến với website!</h1>
-        <p>Đây là nội dung của trang chính.</p>
-    </main>
-
-    <div id="footer"></div> <!-- Footer sẽ được import vào đây -->
-
-    <script src="./script.js"></script> <!-- Nhúng JavaScript -->
-</body>
+      function handleGetValue() {
+        console.log("Nội dung:", myEditor.getData());
+      }
+    </script>
+  </body>
 </html>

@@ -178,24 +178,31 @@ h2 {
 #table-text{
     margin-right: 10px;
 }
-.main-boards-bottom{
+#main-boards-bottom{
     display: flex;
+    flex-wrap: wrap;
     gap: 17px;
     margin-top: 33px;
     margin-left: 24px;
     
 }
 
-.main-boards-bottom .bottom-item .top, .main-boards-bottom .bottom-item .footer{
+#main-boards-bottom .bottom-item .top, #main-boards-bottom .bottom-item .footer{
     display: flex;
     justify-content: space-between;
     margin-left: 14px;
     margin-bottom: 14px;
+
+    
+}
+#main-boards-bottom .bottom-item .footer{
+    margin-top: 20px;
 }
 .bottom-item {
     background-color: #F1F2F4;
     border-radius: 12px;
     width: 272px;
+    height: auto;
     padding: 16px 16px 16px 20px;
     .top {
         font-weight: 600;
@@ -223,9 +230,39 @@ h2 {
             color: #172B4D;
         }
     }
+    
+}
+.add-List-container{
+    position: relative;
+}
+.add-List-container .Add-another-list {
+    padding-bottom: 40px;
+    height: 44px;
+    display:block;
+}
+.add-List-container .add-List-Input{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: none;
+}
+.add-List-Input #nameNewList{
+    margin-left: -13px;
+    width: 256px;
+    height: 32px;
+    border-radius: 4px;
+    border: 1px solid #8590A2;
+    margin-bottom: 8px;
+}
+#messNameNewList{
+    color: red;
+    margin-left: -10px;
+    display: none;
+}
+.inputBtn #btnName{
+    margin-left: -13px;
 }
 .main-boards-bottom .bottom-item .footer{
-
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
@@ -337,7 +374,8 @@ body.body-color::before {
 @media screen and (max-width:577px) {
     body {
         padding-top: 48px;
-
+        width: 576px;
+        height: 1000px;
     }
 
     .frame {
@@ -433,20 +471,30 @@ body.body-color::before {
     .frame-container-main {
         width: 100%;
         background-color: #FFFFFF;
-
     }
 
     .main-boards-top {
         display: flex;
+        flex-wrap:nowrap;
         align-items: center;
         justify-content: space-between;
         width: 576px;
         height: 71.4px;
-        padding: 0 24px;
         border-bottom: 1px solid #cccc;
         margin: 0px;
     }
+    .main-boards-top .top-rigth {
+        margin-top: 20px;
+        margin-left: 50px;
+    }
 
-
+        .main-boards-bottom {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 17px;
+            margin-top: 33px;
+            margin-left: 150px;
+    
+        }
 
 }
