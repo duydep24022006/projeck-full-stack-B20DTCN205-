@@ -47,6 +47,9 @@ const data = {
     },
   ],
 };
+let selectedListsId = null;
+let selectedTasksId = null;
+
 const urlParams = new URLSearchParams(window.location.search);
 const boardId = urlParams.get("boardId");
 let currentUser = getData("currentUser");
@@ -151,7 +154,7 @@ function renderBoard() {
   boardContainer.innerHTML = board.lists
     .map((list, index) => {
       return `
-        <div class="bottom-item ${list.title}">
+         <div class="bottom-item ${list.title}" data-list-id="${list.id}">
           <div class="top">
             <div class="top-left">
               <p id="titleName">${list.title}</p>
@@ -189,7 +192,9 @@ function renderBoard() {
           </div>
           <div class="footer">
 
-            <div class="topContainer top-left "onclick="showInputAddCardName()">
+            <div class="topContainer top-left "onclick="showInputAddCardName('${
+              list.id
+            }')">
               <span><img src="../assets/icon/Frame (2).svg" width="16" height="16" alt="..." /></span>
               &nbsp;Add a card
             </div>
@@ -201,7 +206,9 @@ function renderBoard() {
             <input type="text" id="nameNewCard" placeholder="  Enter a title or paste a link">
             <div class="messNameNewList">Không đc để trống Tên!</div>
             <div class="inputBtn">
-              <button class="btn btn-primary" id="btnAddCard" type="submit" onclick="newCard(${index})">Add card</button>
+              <button class="btn btn-primary" id="btnAddCard" type="submit" onclick="newCard(${
+                list.id
+              })">Add card</button>
               &nbsp;&nbsp;&nbsp;&nbsp;
               <span><i class="fa-regular fa-x" id="exitBtn" onclick="hiddenInputAddCardName()"></i></span>
             </div>
@@ -278,7 +285,9 @@ function NewList() {
   let currentUser = getData("currentUser");
   let users = getData("users");
   let nameNewList = document.getElementById("nameNewList").value.trim();
-  let messNameNewList = document.getElementsByClassName("messNameNewList")[1];
+  let messNameNewList =
+    document.getElementsByClassName("messNameNewList")[1] ||
+    document.getElementsByClassName("messNameNewList")[0];
 
   if (!nameNewList || nameNewList === "") {
     messNameNewList.style.display = "block";
@@ -312,20 +321,24 @@ function NewList() {
   renderBoard();
   document.getElementById("nameNewList").value = "";
 }
-function showInputAddCardName() {
-  let topContainers = document.querySelectorAll(".topContainer");
-  let addCardInput = document.querySelector(".add-card-Input");
-
-  if (
-    addCardInput.style.display === "none" ||
-    addCardInput.style.display === ""
-  ) {
-    topContainers.forEach((item) => {
-      item.style.display = "none";
-    });
+function showInputAddCardName(listsId) {
+  selectedListsId = listsId;
+  document.querySelectorAll(".add-card-Input").forEach((el) => {
+    el.style.display = "none";
+  });
+  const listContainer = document.querySelector(
+    `.bottom-item[data-list-id="${listsId}"]`
+  );
+  if (!listContainer) return;
+  listContainer.querySelectorAll(".topContainer").forEach((el) => {
+    el.style.display = "none";
+  });
+  const addCardInput = listContainer.querySelector(".add-card-Input");
+  if (addCardInput) {
     addCardInput.style.display = "block";
   }
 }
+
 function hiddenInputAddCardName() {
   let topContainers = document.querySelectorAll(".topContainer");
   let addCardInput = document.querySelector(".add-card-Input");
@@ -341,17 +354,27 @@ function hiddenInputAddCardName() {
     document.getElementById("nameNewCard").value = "";
   }
 }
-
-function newCard(index) {
+function newCard(listId) {
   let currentUser = getData("currentUser");
   let users = getData("users");
-  let nameNewCard = document.getElementById("nameNewCard").value.trim();
-  let messNameNewList = document.getElementsByClassName("messNameNewList")[0];
+  let boardId = new URLSearchParams(window.location.search).get("boardId");
+  let board = currentUser.boards.find((b) => b.id == boardId);
+  if (!board) return;
+  let listContainer = document.querySelector(
+    `.bottom-item[data-list-id="${listId}"]`
+  );
+  if (!listContainer) return;
+  let nameNewCardInput = listContainer.querySelector("#nameNewCard");
+  let nameNewCard = nameNewCardInput?.value.trim();
+  let messNameNewList = listContainer.querySelector(".messNameNewList");
+
   if (!nameNewCard || nameNewCard === "") {
-    messNameNewList.style.display = "block";
-    setTimeout(() => {
-      messNameNewList.style.display = "none";
-    }, 3000);
+    if (messNameNewList) {
+      messNameNewList.style.display = "block";
+      setTimeout(() => {
+        messNameNewList.style.display = "none";
+      }, 3000);
+    }
     return;
   }
 
@@ -365,25 +388,23 @@ function newCard(index) {
     created_at: new Date().toISOString(),
   };
 
-  let board = currentUser.boards.find((b) => b.id == boardId);
-  console.log();
-
-  if (board) {
-    board.lists[index].tasks.push(newCard);
+  let listIndex = board.lists.findIndex((l) => l.id == listId);
+  if (listIndex !== -1) {
+    board.lists[listIndex].tasks.push(newCard);
   }
 
   let updatedUsers = users.map((user) => {
-    if (user.id === currentUser.id) {
-      return currentUser;
-    }
-    return user;
+    return user.id === currentUser.id ? currentUser : user;
   });
 
   setData("users", updatedUsers);
   setData("currentUser", currentUser);
+
   renderBoard();
-  document.getElementById("nameNewList").value = "";
+
+  if (nameNewCardInput) nameNewCardInput.value = "";
 }
+
 function showInputEditCardName(title) {
   let titleName = document.getElementById("titleName");
   let editNameTitle = document.getElementById("editNameTitle");
@@ -491,13 +512,10 @@ function filterShow() {
     body.classList.remove("body-color");
   }
 }
-let selectedCardId = null;
-let selectedTastId = null;
-function showTaskDetailModal(title, idCard,idTasks) {
-  selectedTaskId = idTasks;
-  selectedCardId = idCard;
-  console.log("12:" + selectedTaskId);
 
+function showTaskDetailModal(title, idTasks, idLists) {
+  selectedListsId = idLists;
+  selectedTasksId = idTasks;
   let TaskDetailModal = document.querySelector(".Task-Detail-Modal");
   document.getElementById("nameCardchilden").innerText = title;
   let body = document.body;
@@ -514,7 +532,6 @@ function showTaskDetailModal(title, idCard,idTasks) {
 }
 
 function hidenTaskDetailModal() {
-  
   let body = document.body;
   let TaskDetailModal = document.querySelector(".Task-Detail-Modal");
   if (TaskDetailModal.style.display === "block") {
@@ -536,14 +553,16 @@ function DeleteTasksCard() {
     if (result.isConfirmed) {
       let currentUser = getData("currentUser");
       let users = getData("users");
-      
+
       let currentBoard = currentUser.boards.find((b) => b.id == boardId);
       if (!currentBoard) {
         console.error("Board not found");
         return;
       }
-      let currentList = currentBoard.lists.find((l) => l.id == selectedTaskId);
-      let TaskIndex = currentList.tasks.findIndex((t) => t.id == selectedCardId);
+      let currentList = currentBoard.lists.find((l) => l.id == selectedListsId);
+      let TaskIndex = currentList.tasks.findIndex(
+        (t) => t.id == selectedTasksId
+      );
       currentList.tasks.splice(TaskIndex, 1);
       const userIndex = users.findIndex(
         (u) => u.username === currentUser.username
