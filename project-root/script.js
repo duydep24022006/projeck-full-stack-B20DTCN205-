@@ -14,6 +14,7 @@ const data = {
           backdrop:
             "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/640px-Cat_August_2010-4.jpg", // Hình nền bảng
           is_starred: false, // Đánh dấu bảng là yêu thích (starred)
+          is_closet:false,
           created_at: "2025-02-28T12:30:00Z", // Thời gian tạo bảng
           lists: [
             {
@@ -143,9 +144,9 @@ function renderBoards() {
                   </button>
                 </div>
   `;
-    if (board.is_starred) {
+    if (board.is_starred && !board.is_closet) {
       starredContainer.innerHTML += html;
-    } else {
+    } else if (!board.is_starred && !board.is_closet) {
       boardContainer.innerHTML += html;
     }
   });
@@ -226,6 +227,7 @@ function newBoard() {
     description: "Quản lý tiến độ dự án website",
     backdrop: colorInput || imgInput,
     is_starred: false,
+    is_closet: false,
     created_at: new Date().toISOString(),
     lists: [],
   };
@@ -307,6 +309,7 @@ function editBoard(index) {
     description: "Quản lý tiến độ dự án website",
     backdrop: colorInput || imgInput,
     is_starred: false,
+    is_closet: false,
     created_at: new Date().toISOString(),
     lists: [],
   };

@@ -18,7 +18,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" href="../css/Dashboard-Layout.css" />
+    <link rel="stylesheet" href="./css/Dashboard-Layout.css" />
   </head>
   <body>
     <div class="frame">
@@ -133,9 +133,144 @@
           </div>
         </div>
       </div>
-      
+      <div class="Modal-Create-new-board">
+        <div class="top">
+          <h2 class="create-mode">Create board</h2>
+          <h2 class="update-mode">Update board</h2>
+          <i class="fa-solid fa-x" id="exitBtn"></i>
+        </div>
+        <div class="conten">
+          <div class="Background">
+            <h2>Background</h2>
+            <div class="Background-container">
+              <div class="Background-item Background-item1" onclick="changeBackgroundImg('./assets/img/backgr1.png')">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Background-item Background-item2"  onclick="changeBackgroundImg('./assets/img/backgr2.png')">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Background-item Background-item3"  onclick="changeBackgroundImg('./assets/img/backgr3.png')">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Background-item Background-item4" onclick="changeBackgroundImg('./assets/img/backgr4.png')">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+            </div>
+          </div>
+          <div class="Color">
+            <h2>Color</h2>
+            <div class="Color-container">
+              <div
+                class="Color-item Color-item1"
+                data-type="color"
+                data-color="linear-gradient(to bottom right, #ffb100, #fa0c00)"
+                onclick="changeColor('linear-gradient(to bottom right, #ffb100, #fa0c00)')"
+              >
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Color-item Color-item2" onclick="changeColor('linear-gradient(to bottom right, #2609ff, #d20cff)')">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Color-item Color-item3" onclick="changeColor('linear-gradient(to bottom right, #00ff2f, #00ffc8)')">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Color-item Color-item4"   onclick="changeColor('linear-gradient(to bottom right, #00ffe5, #004bfa)')">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Color-item Color-item5" onclick="changeColor('linear-gradient(to bottom right, #ff00c8, #ff00a0)')">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+              <div class="Color-item Color-item6" onclick="changeColor('linear-gradient(to bottom right, #ff00ea, #fa0c00)')">
+                <img
+                  src="./assets/icon/Vector.svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+              </div>
+            </div>
+            <div class="Board-title">
+              <h2>Board title <img src="./assets/icon/hoathi.svg" alt="" /></h2>
+              <input
+                type="text"
+                placeholder="E.g. Shopping list for birthday..."
+                id="Board-title-input"
+              />
+              <p id="messError">👋 Please provide a valid board title.</p>
+            </div>
+          </div>
+          <div class="footer">
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              id="board-close"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary create-mode"
+              id="board-create"
+            >
+              Create
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary update-mode"
+              id="board-Save"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <script src="./script.js"></script>
+    <script src="../js/Starred-Boards.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

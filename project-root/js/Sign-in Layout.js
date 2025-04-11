@@ -14,6 +14,7 @@ const data = {
           backdrop:
             "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/640px-Cat_August_2010-4.jpg", // Hình nền bảng
           is_starred: true, // Đánh dấu bảng là yêu thích (starred)
+          is_closet: false,
           created_at: "2025-02-28T12:30:00Z", // Thời gian tạo bảng
           lists: [
             // Các danh sách trong bảng
@@ -182,20 +183,14 @@ function setData(name, data) {
   localStorage.setItem(name, JSON.stringify(data));
 }
 
-
 function getData(name) {
   const stored = JSON.parse(localStorage.getItem(name));
-
-  // Nếu stored là object có thuộc tính users → lấy stored.users
   if (stored && stored.users) {
     return stored.users;
   }
-
-  // Nếu stored là mảng → trả trực tiếp
   if (Array.isArray(stored)) {
     return stored;
   }
-  // Mặc định trả về data.users nếu không có gì
   return data.users;
 }
 document

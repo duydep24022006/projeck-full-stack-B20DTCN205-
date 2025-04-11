@@ -14,6 +14,7 @@ const data = {
           backdrop:
             "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/640px-Cat_August_2010-4.jpg", // Hình nền bảng
           is_starred: true, // Đánh dấu bảng là yêu thích (starred)
+          is_closet: false,
           created_at: "2025-02-28T12:30:00Z", // Thời gian tạo bảng
           lists: [
             // Các danh sách trong bảng

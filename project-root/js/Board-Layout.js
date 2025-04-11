@@ -15,6 +15,7 @@ const data = {
             "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/640px-Cat_August_2010-4.jpg", // Hình nền bảng
           color: "linear-gradient(to bottom right, #ffb100, #fa0c00)",
           is_starred: false, // Đánh dấu bảng là yêu thích (starred)
+          is_closet: false,
           created_at: "2025-02-28T12:30:00Z", // Thời gian tạo bảng
           lists: [
             {
@@ -106,14 +107,13 @@ document.getElementById("text-Close").addEventListener("click", function () {
     if (result.isConfirmed) {
       let currentUser = getData("currentUser");
       let users = getData("users");
-      let index = currentUser.boards.findIndex((b) => b.id == boardId);
-      console.log(index);
+      let index = currentUser.boards.find((b) => b.id == boardId);
       if (index === -1) {
         console.error("Board not found");
         return;
       }
-      console.log(currentUser);
-      currentUser.boards.splice(index, 1);
+      index.is_closet = true;
+      console.log(index.is_closet);
       const userIndex = users.findIndex(
         (u) => u.username === currentUser.username
       );
@@ -399,9 +399,7 @@ function newCard(listId) {
 
   setData("users", updatedUsers);
   setData("currentUser", currentUser);
-
   renderBoard();
-
   if (nameNewCardInput) nameNewCardInput.value = "";
 }
 
