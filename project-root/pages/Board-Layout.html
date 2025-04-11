@@ -104,14 +104,7 @@
                 <div class="textcontainer">
                   Tổ chức sự kiện Year-end party !
                 </div>
-                <img
-                  src="../assets/icon/Button - Star or unstar board.svg"
-                  width="32"
-                  height="32"
-                  alt="..."
-                  class="star-true star-false"
-                  id="Star-or-unstar-board"
-                />
+                <div class="Star-or-unstar-board"></div>
                 <img
                   src="../assets/icon/Link - Board.svg"
                   width="85.08999633789062"
@@ -134,7 +127,7 @@
                   board</span
                 >
               </div>
-              <div class="top-rigth">
+              <div class="top-rigth" id="FiltersTasts">
                 <p>
                   <span
                     ><img
@@ -155,6 +148,7 @@
                   width="16"
                   height="16"
                   alt="..."
+                  id="cancelFilter"
                 />
               </div>
               <div class="FilterDropdown-content">
@@ -244,7 +238,6 @@
                       <div id="orange" class="colorItem"></div>
                     </div>
                   </div>
-
                   <input type="checkbox" />
                   <span
                     ><select name="Select labels" id="selectLabels">
@@ -258,8 +251,85 @@
           </div>
         </div>
       </div>
+      <div class="Task-Detail-Modal">
+        <div class="Section-header">
+          <div class="Section-header-top">
+            <img
+              src="../assets/icon/Img - Incomplete.svg"
+              width="16"
+              height="16"
+              alt="..."
+            />
+            <span id="nameCardchilden"></span>
+          </div>
+          <div class="Section-header-bottom">
+            in list
+            <span
+              ><img
+                src="../assets/icon/Button (4).svg"
+                width="103.9"
+                height="16"
+                alt="..."
+            /></span>
+          </div>
+        </div>
+        <div class="Section-conten">
+          <div class="Section-conten-left">
+            <div class="left-top">
+              <img
+                src="../assets/icon/Frame (3).svg"
+                width="24"
+                height="24"
+                alt="..."
+              />
+              <span>Description</span>
+            </div>
+            <div class="left-bottom">
+              <textarea id="editorInput"></textarea>
+              <button type="button" class="btn btn-primary me-2">Save</button>
+              <button
+                type="button"
+                class="btn btn-link text-secondary text-decoration-none"
+                id="cancelBtnTask"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+          <div class="Section-conten-rigth">
+            <div class="rigth-top">
+              <button class="btn-rigth ">
+                <img
+                  src="../assets/icon/Vector (1).svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+                Labels
+              </button>
+              <button class="btn-rigth">
+                <img
+                  src="../assets/icon/Frame (4).svg"
+                  width="16"
+                  height="16"
+                  alt="..."
+                />
+                Dates
+              </button>
+            </div>
+            <div class="rigth-bottom">
+              <button class="btn-rigth" id="DeleteTasksCard">
+                <i class="fas fa-minus" style="color: white"></i>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
     <script src="../js/Board-Layout.js"></script>
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

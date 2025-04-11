@@ -169,7 +169,11 @@ h2 {
     line-height: 32px;
     margin-right:30px;
 }
-#Star-or-unstar-board{
+#Star-board{
+    margin-right: 23px;
+    color: gold;
+}
+#Star-unstar-board{
     margin-right: 23px;
 }
 #Link-Board{
@@ -191,9 +195,18 @@ h2 {
     display: flex;
     justify-content: space-between;
     margin-left: 14px;
-    margin-bottom: 14px;
-
-    
+    margin-bottom: 14px; 
+}
+.top .top-left #titleName{
+    display: block;
+}
+.top .top-left #editNameTitle {
+    width: 200px;
+    height: 32px;
+    border-radius: 4px;
+    margin-left: -14px;
+    border: 1px solid #cccc;
+    display: none;
 }
 #main-boards-bottom .bottom-item .footer{
     margin-top: 20px;
@@ -254,7 +267,24 @@ h2 {
     border: 1px solid #8590A2;
     margin-bottom: 8px;
 }
-#messNameNewList{
+.topContainer{
+    display: block;
+}
+.add-card-Input{
+    display: none;
+    #nameNewCard{
+        width: 256px;
+        height: 56px;
+        margin-left: -12px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        border: 1px solid #cccc;
+    }
+    #btnAddCard{
+        margin-left: -12px;
+    }
+}
+.messNameNewList{
     color: red;
     margin-left: -10px;
     display: none;
@@ -285,6 +315,7 @@ h2 {
     height: 685px;
     border-radius: 8px;
     position: absolute;
+    z-index: 13;
     box-shadow:
             0px 0px 1px rgba(9, 30, 66, 0.31),
             0px 8px 12px rgba(9, 30, 66, 0.15);
@@ -308,7 +339,6 @@ h2 {
 }
 .FilterDropdown-content{
     padding-left:12px;
-
 }
 .FilterDropdown-content .Caption{
     font-weight: 600;
@@ -370,7 +400,98 @@ body.body-color::before {
     background: rgba(128, 128, 128, 0.5);
     z-index: 12;
 }
+.Task-Detail-Modal{
+    position: absolute;
+    width: 768px;
+    height:497px ;
+    border-radius: 12px;
+    left: 300px;
+    top: 150px;
+    background-color:#FFFFFF;
+    box-shadow: 0px 0px 1px 0px rgba(9, 30, 66, 0.31);
+    z-index: 13;
+    display: none;
+}
+.Section-header{
+    margin-top:16px ;
+    margin-left: 16px;
+    margin-bottom: 25px;
+}
+.Section-header .Section-header-top{
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    margin-bottom: 8px;
+    color: #172B4D;
+}
+.Section-header .Section-header-bottom{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #44546F;
+    margin-left: 22px;
+}
+.Section-conten{
+    display: flex;
+    flex-wrap: nowrap;
 
+}
+.Section-conten .Section-conten-left{
+    margin-left: 16px;
+
+}
+.Section-conten-left{
+    width: 552px;
+    height: 359px;
+}
+.Section-conten-left .left-top{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 8px;
+    color: #172B4D;
+}
+.Section-conten-left .left-bottom{
+    width: 512px;
+    margin-left: 40px;
+}
+.ck-editor__editable{
+    width: 512px;
+    height: 275px;
+    margin-bottom: 8px;
+}
+.btn-rigth{
+    width: 168px;
+    height:32px;
+    border-radius: 3px;
+    border: none;
+    margin-bottom: 8px;
+    margin-left: 16px;
+    text-align: start;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    padding-left: 10px;
+
+}
+.rigth-top .btn-rigth{
+    background-color: #091E420F;
+    color: #172B4D;
+}
+.rigth-bottom .btn-rigth {
+    background-color:#C9372C;
+    color:#FFFFFF;
+}
+body.body-color::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(128, 128, 128, 0.5);
+    z-index: 12;
+}
 @media screen and (max-width:577px) {
     body {
         padding-top: 48px;

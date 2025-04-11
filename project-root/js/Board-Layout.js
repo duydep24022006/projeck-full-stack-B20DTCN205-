@@ -101,6 +101,25 @@ document.getElementById("text-Close").addEventListener("click", function () {
     confirmButtonText: "Yes, close it!",
   }).then((result) => {
     if (result.isConfirmed) {
+      let currentUser = getData("currentUser");
+      let users = getData("users");
+      let index = currentUser.boards.findIndex((b) => b.id == boardId);
+      console.log(index);
+      if (index === -1) {
+        console.error("Board not found");
+        return;
+      }
+      console.log(currentUser);
+      currentUser.boards.splice(index, 1);
+      const userIndex = users.findIndex(
+        (u) => u.username === currentUser.username
+      );
+
+      if (userIndex !== -1) users[userIndex] = currentUser;
+      setData("users", users);
+      setData("currentUser", currentUser);
+      window.location.href = "../index.html";
+      renderBoard();
       Swal.fire({
         title: "Deleted!",
         text: "Your file has been deleted.",
@@ -118,30 +137,45 @@ function renderBoard() {
   let currentUser = getData("currentUser");
   let boardId = new URLSearchParams(window.location.search).get("boardId");
   const boardContainer = document.getElementById("main-boards-bottom");
+  let StarOrUnstarBoard = document.querySelector(".Star-or-unstar-board");
+
   boardContainer.innerHTML = "";
   let board = currentUser.boards.find((b) => b.id == boardId);
+
+  StarOrUnstarBoard.innerHTML = board.is_starred
+    ? '<i class="fa-solid fa-star" id="Star-board" style="color: gold;"></i>'
+    : '<i class="fa-regular fa-star" id="Star-unstar-board"></i>';
+
   if (!board || !board.lists || !boardContainer) return;
 
   boardContainer.innerHTML = board.lists
-    .map((list,index) => {
+    .map((list, index) => {
       return `
         <div class="bottom-item ${list.title}">
           <div class="top">
-            <div class="top-left">${list.title}</div>
+            <div class="top-left">
+              <p id="titleName">${list.title}</p>
+              <input type="text" id="editNameTitle" data-index="${index}" onkeydown="handleUpdateListTitle(event)" >
+            </div>
             <div class="top-rigth">
-              <img src="../assets/icon/Vector1.svg" width="17" height="7.59" alt="..." />
-              <img src="../assets/icon/Frame (1).svg" width="16" height="16" alt="..." />
+              <img src="../assets/icon/Frame (1).svg" width="16" height="16" alt="..."  onclick="showInputEditCardName('${
+                list.title
+              }')"/>
             </div>
           </div>
-          <div class="content">
+          <div class="content"> 
             ${
               list.tasks && list.tasks.length
                 ? list.tasks
                     .map((task) => {
                       return `
-                      <div class="item ${task.done ? "item1" : "item2"}">
+                      <div onclick="showTaskDetailModal('${task.title}','${
+                        task.id
+                      }','${list.id}')" class="item  ${
+                        task.status !== "pending" ? "item1" : "item2"
+                      }">
                         ${
-                          task.done
+                          task.status !== "pending"
                             ? `<span><img src="../assets/img/check_circle.png" width="20" height="20" alt="..." /></span>`
                             : ""
                         }
@@ -154,12 +188,22 @@ function renderBoard() {
             }
           </div>
           <div class="footer">
-            <div class="top-left">
+
+            <div class="topContainer top-left "onclick="showInputAddCardName()">
               <span><img src="../assets/icon/Frame (2).svg" width="16" height="16" alt="..." /></span>
               &nbsp;Add a card
             </div>
-            <div class="top-rigth">
-              <img src="../assets/icon/Button - Create from template….svg" width="32" height="32" alt="..." onclick="deletedList(${index})"/>
+            <div class="topContainer top-rigth">
+              <img src="../assets/icon/Button - Create from template….svg" width="32" height="32" alt="..." onclick="deletedList( ${index})"/>
+            </div>
+          </div>
+          <div class="add-card-Input">
+            <input type="text" id="nameNewCard" placeholder="  Enter a title or paste a link">
+            <div class="messNameNewList">Không đc để trống Tên!</div>
+            <div class="inputBtn">
+              <button class="btn btn-primary" id="btnAddCard" type="submit" onclick="newCard(${index})">Add card</button>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <span><i class="fa-regular fa-x" id="exitBtn" onclick="hiddenInputAddCardName()"></i></span>
             </div>
           </div>
         </div>
@@ -175,7 +219,7 @@ function renderBoard() {
       </div>
       <div class="bottom-item add-List-Input">
         <input type="text" id="nameNewList" placeholder="  Enter list name...">
-        <div id="messNameNewList">Bạn không đc để trống tên!</div>
+        <div class="messNameNewList">Không đc để trống tên!</div>
         <div class="inputBtn">
           <button class="btn btn-primary" id="btnName" type="submit" onclick="NewList()">Add list</button>
           &nbsp;&nbsp;&nbsp;&nbsp;
@@ -185,8 +229,27 @@ function renderBoard() {
     </div>
   `;
 }
-
 renderBoard();
+document
+  .querySelector(".Star-or-unstar-board")
+  .addEventListener("click", function () {
+    let currentUser = getData("currentUser");
+    let boardId = new URLSearchParams(window.location.search).get("boardId");
+    let board = currentUser.boards.find((b) => b.id == boardId);
+
+    board.is_starred = !board.is_starred;
+    let users = getData("users");
+    let userIndex = users.findIndex(
+      (user) => user.username === currentUser.username
+    );
+    if (userIndex !== -1) {
+      users[userIndex] = currentUser;
+      setData("users", users);
+      setData("currentUser", currentUser);
+    }
+
+    renderBoard();
+  });
 function showInputAddlistName() {
   let addAnotherList = document.querySelector(".Add-another-list");
   let addListInput = document.querySelector(".add-List-Input");
@@ -210,44 +273,173 @@ function hiddenInputAddName() {
     document.getElementById("nameNewList").value = "";
   }
 }
+
 function NewList() {
   let currentUser = getData("currentUser");
   let users = getData("users");
-
   let nameNewList = document.getElementById("nameNewList").value.trim();
-  let messNameNewList = document.getElementById("messNameNewList");
-  if (!nameNewList) {
+  let messNameNewList = document.getElementsByClassName("messNameNewList")[1];
+
+  if (!nameNewList || nameNewList === "") {
     messNameNewList.style.display = "block";
     setTimeout(() => {
       messNameNewList.style.display = "none";
     }, 3000);
     return;
   }
-    let newList = {
-      id: Date.now() + Math.floor(Math.random()),
-      title: nameNewList,
-      created_at: new Date().toISOString(),
-      tasks: [],
-    };
 
-    // Tìm board đang mở
-    let board = currentUser.boards.find((b) => b.id == boardId);
-    if (board) {
-      board.lists.push(newList); 
+  let newList = {
+    id: Date.now() + Math.floor(Math.random()),
+    title: nameNewList,
+    created_at: new Date().toISOString(),
+    tasks: [],
+  };
+
+  let board = currentUser.boards.find((b) => b.id == boardId);
+  if (board) {
+    board.lists.push(newList);
+  }
+
+  let updatedUsers = users.map((user) => {
+    if (user.id === currentUser.id) {
+      return currentUser;
     }
+    return user;
+  });
 
-    let updatedUsers = users.map((user) => {
-      if (user.id === currentUser.id) {
-        return currentUser;
-      }
-      return user;
-    });
-
-    setData("users", updatedUsers);
-    setData("currentUser", currentUser);
+  setData("users", updatedUsers);
+  setData("currentUser", currentUser);
+  renderBoard();
   document.getElementById("nameNewList").value = "";
+}
+function showInputAddCardName() {
+  let topContainers = document.querySelectorAll(".topContainer");
+  let addCardInput = document.querySelector(".add-card-Input");
+
+  if (
+    addCardInput.style.display === "none" ||
+    addCardInput.style.display === ""
+  ) {
+    topContainers.forEach((item) => {
+      item.style.display = "none";
+    });
+    addCardInput.style.display = "block";
+  }
+}
+function hiddenInputAddCardName() {
+  let topContainers = document.querySelectorAll(".topContainer");
+  let addCardInput = document.querySelector(".add-card-Input");
+  if (
+    addCardInput.style.display === "block" ||
+    addCardInput.style.display === ""
+  ) {
+    addCardInput.style.display = "none";
+
+    topContainers.forEach((item) => {
+      item.style.display = "block";
+    });
+    document.getElementById("nameNewCard").value = "";
+  }
+}
+
+function newCard(index) {
+  let currentUser = getData("currentUser");
+  let users = getData("users");
+  let nameNewCard = document.getElementById("nameNewCard").value.trim();
+  let messNameNewList = document.getElementsByClassName("messNameNewList")[0];
+  if (!nameNewCard || nameNewCard === "") {
+    messNameNewList.style.display = "block";
+    setTimeout(() => {
+      messNameNewList.style.display = "none";
+    }, 3000);
+    return;
+  }
+
+  let newCard = {
+    id: Date.now() + Math.floor(Math.random()),
+    title: nameNewCard,
+    description: "Tạo wireframe cho trang chủ",
+    status: "pending",
+    due_date: "2025-03-05T23:59:59Z",
+    tags: [],
+    created_at: new Date().toISOString(),
+  };
+
+  let board = currentUser.boards.find((b) => b.id == boardId);
+  console.log();
+
+  if (board) {
+    board.lists[index].tasks.push(newCard);
+  }
+
+  let updatedUsers = users.map((user) => {
+    if (user.id === currentUser.id) {
+      return currentUser;
+    }
+    return user;
+  });
+
+  setData("users", updatedUsers);
+  setData("currentUser", currentUser);
+  renderBoard();
+  document.getElementById("nameNewList").value = "";
+}
+function showInputEditCardName(title) {
+  let titleName = document.getElementById("titleName");
+  let editNameTitle = document.getElementById("editNameTitle");
+
+  if (
+    editNameTitle.style.display === "none" ||
+    editNameTitle.style.display === ""
+  ) {
+    document.getElementById("editNameTitle").value = title;
+    titleName.style.display = "none";
+    editNameTitle.style.display = "block";
+  } else {
+    editNameTitle.style.display = "none";
+    titleName.style.display = "block";
+    document.getElementById("titleName").value = "";
+  }
+}
+document.querySelectorAll("input[id^='nameNewList']").forEach((input) => {
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      let index = parseInt(this.dataset.index);
+      editTitle(index);
+    }
+  });
+});
+
+function handleUpdateListTitle(event) {
+  if (event.key === "Enter") {
+    let input = event.target;
+    let newTitle = input.value.trim();
+    let index = input.getAttribute("data-index");
+
+    if (newTitle) {
+      updateListTitle(index, newTitle);
+    }
+  }
+}
+
+function updateListTitle(index, newTitle) {
+  let currentUser = getData("currentUser");
+  let users = getData("users");
+
+  let board = currentUser.boards.find((b) => b.id == boardId);
+  if (!board) return;
+
+  board.lists[index].title = newTitle;
+
+  let updatedUsers = users.map((user) =>
+    user.id === currentUser.id ? currentUser : user
+  );
+
+  setData("users", updatedUsers);
+  setData("currentUser", currentUser);
   renderBoard();
 }
+
 function deletedList(index) {
   Swal.fire({
     title: "Are you sure?",
@@ -259,6 +451,21 @@ function deletedList(index) {
     confirmButtonText: "Yes, delete it!",
   }).then((result) => {
     if (result.isConfirmed) {
+      let currentUser = getData("currentUser");
+      let users = getData("users");
+      let currentBoard = currentUser.boards.find((b) => b.id == boardId);
+      if (!currentBoard) {
+        console.error("Board not found");
+        return;
+      }
+      currentBoard.lists.splice(index, 1);
+      const userIndex = users.findIndex(
+        (u) => u.username === currentUser.username
+      );
+      if (userIndex !== -1) users[userIndex] = currentUser;
+      setData("users", users);
+      setData("currentUser", currentUser);
+      renderBoard();
       Swal.fire({
         title: "Deleted!",
         text: "Your file has been deleted.",
@@ -267,6 +474,110 @@ function deletedList(index) {
     }
   });
 }
+
+document.getElementById("FiltersTasts").addEventListener("click", filterShow);
+document.getElementById("cancelFilter").addEventListener("click", filterShow);
+function filterShow() {
+  let FilterDropdown = document.querySelector(".FilterDropdown");
+  let body = document.body;
+  if (
+    FilterDropdown.style.display === "none" ||
+    FilterDropdown.style.display === ""
+  ) {
+    FilterDropdown.style.display = "block";
+    body.classList.add("body-color");
+  } else {
+    FilterDropdown.style.display = "none";
+    body.classList.remove("body-color");
+  }
+}
+let selectedCardId = null;
+let selectedTastId = null;
+function showTaskDetailModal(title, idCard,idTasks) {
+  selectedTaskId = idTasks;
+  selectedCardId = idCard;
+  console.log("12:" + selectedTaskId);
+
+  let TaskDetailModal = document.querySelector(".Task-Detail-Modal");
+  document.getElementById("nameCardchilden").innerText = title;
+  let body = document.body;
+  if (
+    TaskDetailModal.style.display === "none" ||
+    TaskDetailModal.style.display === ""
+  ) {
+    TaskDetailModal.style.display = "block";
+    body.classList.add("body-color");
+  } else {
+    TaskDetailModal.style.display = "none";
+    body.classList.remove("body-color");
+  }
+}
+
+function hidenTaskDetailModal() {
+  
+  let body = document.body;
+  let TaskDetailModal = document.querySelector(".Task-Detail-Modal");
+  if (TaskDetailModal.style.display === "block") {
+    TaskDetailModal.style.display = "none";
+    body.classList.remove("body-color");
+    myEditor.setData("");
+  }
+}
+function DeleteTasksCard() {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let currentUser = getData("currentUser");
+      let users = getData("users");
+      
+      let currentBoard = currentUser.boards.find((b) => b.id == boardId);
+      if (!currentBoard) {
+        console.error("Board not found");
+        return;
+      }
+      let currentList = currentBoard.lists.find((l) => l.id == selectedTaskId);
+      let TaskIndex = currentList.tasks.findIndex((t) => t.id == selectedCardId);
+      currentList.tasks.splice(TaskIndex, 1);
+      const userIndex = users.findIndex(
+        (u) => u.username === currentUser.username
+      );
+      if (userIndex !== -1) users[userIndex] = currentUser;
+      setData("users", users);
+      setData("currentUser", currentUser);
+
+      renderBoard();
+      hidenTaskDetailModal();
+      Swal.fire({
+        title: "Deleted!",
+        text: "Your file has been deleted.",
+        icon: "success",
+      });
+    }
+  });
+}
+document
+  .getElementById("DeleteTasksCard")
+  .addEventListener("click", DeleteTasksCard);
+document
+  .getElementById("cancelBtnTask")
+  .addEventListener("click", hidenTaskDetailModal);
+let myEditor;
+document.addEventListener("DOMContentLoaded", function () {
+  ClassicEditor.create(document.querySelector("#editorInput"))
+    .then((editor) => {
+      myEditor = editor;
+    })
+    .catch((error) => {
+      console.error("Có lỗi xảy ra khi khởi tạo CKEditor:", error);
+    });
+});
 function getData(name) {
   return JSON.parse(localStorage.getItem(name)) || data.users;
 }
