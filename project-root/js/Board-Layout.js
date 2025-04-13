@@ -138,7 +138,6 @@ document.getElementById("Boards").addEventListener("click", function () {
 
 function renderBoard() {
   let currentUser = getData("currentUser");
-  let boardId = new URLSearchParams(window.location.search).get("boardId");
   const boardContainer = document.getElementById("main-boards-bottom");
   let StarOrUnstarBoard = document.querySelector(".Star-or-unstar-board");
 
@@ -546,24 +545,26 @@ function filterShow() {
     body.classList.remove("body-color");
   }
 }
-
+let currentList = null;
+let TaskIndex = null;
 function showTaskDetailModal(title, idTasks, idLists) {
   selectedListsId = idLists;
   selectedTasksId = idTasks;
   let TaskDetailModal = document.querySelector(".Task-Detail-Modal");
   let statusTasksBtn = document.getElementById("statusTasksBtn");
+  let currentUser = getData("currentUser");
   let currentBoard = currentUser.boards.find((b) => b.id == boardId);
   if (!currentBoard) {
     console.error("Board not found");
     return;
   }
+  currentList = currentBoard.lists.find((l) => l.id == selectedListsId);
+  TaskIndex = currentList.tasks.findIndex((t) => t.id == selectedTasksId);
 
-  let currentList = currentBoard.lists.find((l) => l.id == selectedListsId);
-  let TaskIndex = currentList.tasks.findIndex((t) => t.id == selectedTasksId);
-
-  statusTasksBtn.innerHTML = currentList.tasks[TaskIndex]
-    ? '<img src="../assets/img/check_circle.png" width="16" height="16" alt="..." />'
-    : '<img src="../assets/icon/Img - Incomplete.svg" width="16" height="16" alt="..." />';
+  statusTasksBtn.innerHTML =
+    currentList.tasks[TaskIndex].status !== "pending"
+      ? '<img src="../assets/img/check_circle.png" width="16" height="16" alt="..." />'
+      : '<img src="../assets/icon/Img - Incomplete.svg" width="16" height="16" alt="..." />';
 
   document.getElementById("nameCardchilden").innerText = title;
 
@@ -588,9 +589,51 @@ function hidenTaskDetailModal() {
     myEditor.setData("");
   }
 }
-document, getElementById("statusTasksBtn").addEventListener("click", function () {
-  
-})
+document
+  .getElementById("statusTasksBtn")
+  .addEventListener("click", function () {
+    let currentUser = getData("currentUser");
+    let users = getData("users");
+
+    let boardIndex = currentUser.boards.findIndex((item) => item.id == boardId);
+    if (boardIndex === -1) {
+      console.error("Board not found");
+      return;
+    }
+
+    let listIndex = currentUser.boards[boardIndex].lists.findIndex(
+      (item) => item.id == selectedListsId
+    );
+    if (listIndex === -1) {
+      console.error("List not found");
+      return;
+    }
+
+    let taskIndex = currentUser.boards[boardIndex].lists[
+      listIndex
+    ].tasks.findIndex((item) => item.id == selectedTasksId);
+    if (taskIndex === -1) {
+      console.error("Task not found");
+      return;
+    }
+
+    let task = currentUser.boards[boardIndex].lists[listIndex].tasks[taskIndex];
+    task.status = task.status === "pending" ? "Completed" : "pending";
+
+    const statusTasksBtn = document.getElementById("statusTasksBtn");
+    statusTasksBtn.innerHTML =
+      task.status !== "pending"
+        ? '<img src="../assets/img/check_circle.png" width="16" height="16" alt="Chưa hoàn thành" />'
+        : '<img src="../assets/icon/Img - Incomplete.svg" width="16" height="16" alt="Đã hoàn thành" />';
+    setData("currentUser", currentUser);
+    let userIndex = users.findIndex((user) => user.id === currentUser.id);
+    if (userIndex !== -1) {
+      users[userIndex] = currentUser;
+      setData("users", users);
+    }
+    renderBoard();
+  });
+
 function DeleteTasksCard() {
   Swal.fire({
     title: "Are you sure?",
