@@ -114,28 +114,11 @@ h2 {
     font-weight: 400;
 }
 
-.content-item .item1-backgr,.content-item .item2-backgr,.content-item .item3-backgr,.content-item .item4-backgr{
+.content-item img{
     width: 24px;
     height: 20px;
     border-radius: 2px;
     opacity: 0.7;
-}
-.content-item .item1-backgr{
-    background-color: #CD5A91;
-}
-.content-item .item2-backgr{
-    background: url("../assets/img/backgr3.png")no-repeat center;
-        background-size: cover;
-    }
-
-.content-item .item3-backgr {
-    background: url("../assets/img/backgr5.png")no-repeat center;
-    background-size: cover;
-    }
-
-.content-item .item4-backgr {
-    background: url("../assets/img/backgr1.png")no-repeat center;
-    background-size: cover;
 }
 
 .frame-container-main {

@@ -237,6 +237,44 @@ function renderBoard() {
   `;
 }
 renderBoard();
+function renderYourBoards() {
+  const currentUser = getData("currentUser");
+  if (!currentUser) {
+    console.warn("Chưa đăng nhập hoặc currentUser không tồn tại.");
+    return;
+  }
+
+  const boardContainer = document.querySelector(".content");
+  boardContainer.innerHTML = "";
+
+  currentUser.boards.forEach((board, index) => {
+    let background = board.backdrop;
+
+    const isImage =
+      background.startsWith("http") ||
+      background.startsWith("./") ||
+      background.startsWith("../");
+
+    const isOnlineImage = background.startsWith("http");
+
+    const bgStyle = isImage
+      ? `background-image: url('${
+          isOnlineImage ? background : `.${background}`
+        }'); background-size: cover; background-position: center;`
+      : `background: ${background};`;
+
+    let html = `  
+      <div class="content-item">
+        <div class="item1-backgr" style="${bgStyle}; width: 24px; height: 20px; border-radius: 4px;"></div>
+        <p>${board.title}</p>
+      </div>
+    `;
+    
+      boardContainer.innerHTML += html;
+  });
+}
+
+renderYourBoards();
 document
   .querySelector(".Star-or-unstar-board")
   .addEventListener("click", function () {

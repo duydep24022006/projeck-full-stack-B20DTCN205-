@@ -51,10 +51,10 @@ const data = {
 document.addEventListener("DOMContentLoaded", function () {
   var headerCss = document.createElement("link");
   headerCss.rel = "stylesheet";
-  headerCss.href = "./components/header.css";
+  headerCss.href = "../components/header.css";
   document.head.appendChild(headerCss);
 
-  fetch("./components/header.html")
+  fetch("../components/header-Board-Layout.html")
     .then((response) => response.text())
     .then((data) => {
       document.getElementById("frame-header").innerHTML = data;
@@ -112,54 +112,52 @@ function renderBoards() {
     console.warn("Chưa đăng nhập hoặc currentUser không tồn tại.");
     return;
   }
-  const starredContainer = document.querySelector(".main-starredBoards-bottom");
-  const boardContainer = document.querySelector(".main-boards-bottom");
 
-  starredContainer.innerHTML = "";
+  const boardContainer = document.querySelector(".main-boards-bottom");
   boardContainer.innerHTML = "";
 
   currentUser.boards.forEach((board, index) => {
     let background = board.backdrop;
-    let isImage =
+
+    const isImage =
       background.startsWith("http") ||
       background.startsWith("./") ||
       background.startsWith("../");
 
+    const isOnlineImage = background.startsWith("http");
+
+    const bgStyle = isImage
+      ? `background-image: url('${
+          isOnlineImage ? background : `.${background}`
+        }'); background-size: cover; background-position: center;`
+      : `background: ${background};`;
+
     let html = `  
-              <div class="createBoard" style="
-                ${
-                  isImage
-                    ? `background-image: url('${background}'); background-size: cover; background-position: center;`
-                    : `background: ${background};`
-                }
-                width: 256px; height: 130px; border-radius: 5px;" 
-               
-              >
-                  <button  id="boardsTitle"   onclick="editBoardLayout(${
-                    board.id
-                  })">${board.title}</button>
-                  <button id="EditThisBoard" onclick="toggleEditBoard(${index})">
-                    <span
-                      ><img
-                        src="./assets/icon/Vector (1).svg"
-                        width="16"
-                        height="16"
-                        alt="..." /></span
-                    >Edit this board
-                  </button>
-                </div>
-  `;
-    if (board.is_starred && !board.is_closet) {
-      starredContainer.innerHTML += html;
-    } else if (!board.is_starred && !board.is_closet) {
+      <div class="createBoard" style="
+        ${bgStyle}
+        width: 256px; height: 130px; border-radius: 5px;"
+      >
+        <button id="boardsTitle" onclick="editBoardLayout(${board.id})">
+          ${board.title}
+        </button>
+        <button id="EditThisBoard" onclick="toggleEditBoard(${index})">
+          <span>
+            <img
+              src="../assets/icon/Vector (1).svg"
+              width="16"
+              height="16"
+              alt="..."
+            />
+          </span>
+          Edit this board
+        </button>
+      </div>
+    `;
+
+    if (board.is_closet) {
       boardContainer.innerHTML += html;
     }
   });
-  const htmlNewBoard = `
-          <div class="createNewBoard">
-                  <button id="NewBoard" onclick="toggleNewBoard()">Create new board</button>
-                </div>`;
-  document.querySelector(".main-boards-bottom").innerHTML += htmlNewBoard;
 }
 
 document.querySelector(".top-trello").addEventListener("click", toggleMenu);
@@ -314,7 +312,7 @@ function editBoard(index) {
     description: "Quản lý tiến độ dự án website",
     backdrop: colorInput || imgInput,
     is_starred: false,
-    is_closet: false,
+    is_closet: true,
     created_at: new Date().toISOString(),
     lists: [],
   };
@@ -339,15 +337,16 @@ function clearInput() {
   imgInput = "./assets/img/backgr1.png";
   colorInput = "";
 }
-function editBoardLayout(id) {
-  window.location.href = `./pages/Board-Layout.html?boardId=${id}`;
-}
-document.getElementById("closedBoards").addEventListener("click", function () {
-  window.location.href = `./pages/Closed-Boards.html`;
+document.getElementById("Boards").addEventListener("click", function () {
+  window.location.href = `../index.html`;
 });
 document.getElementById("starredBoards").addEventListener("click", function () {
-  window.location.href = `./pages/Starred-Boards.html`;
+  window.location.href = `./Starred-Boards.html`;
 });
+function editBoardLayout(id) {
+  window.location.href = `../pages/Board-Layout.html?boardId=${id}`;
+}
+
 document.getElementById("board-create").addEventListener("click", newBoard);
 document.getElementById("exitBtn").addEventListener("click", hideNewBoard);
 document.getElementById("board-close").addEventListener("click", hideNewBoard);
