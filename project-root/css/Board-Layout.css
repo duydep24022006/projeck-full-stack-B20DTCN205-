@@ -386,7 +386,8 @@ body.body-color::before {
 .Task-Detail-Modal{
     position: absolute;
     width: 768px;
-    height:497px ;
+    height:auto;
+    padding-bottom: 80px;
     border-radius: 12px;
     left: 300px;
     top: 150px;

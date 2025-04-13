@@ -678,7 +678,19 @@ function DeleteTasksCard() {
     }
   });
 }
-
+document
+  .getElementById("saveTaskDetailModal")
+  .addEventListener("click", function () {
+    let inputText = myEditor.getData().trim();
+    if (!inputText || inputText === "") {
+      const messageBox = document.getElementById("messSaveTaskValidate");
+      messageBox.innerHTML = `<p style="font-style: italic; color:red;">No description provided.</p>`;
+      setTimeout(() => {
+        messageBox.innerHTML = "";
+      }, 3000);
+      return;
+    }
+  });
 document.getElementById("starredBoards").addEventListener("click", function () {
   window.location.href = `./Starred-Boards.html`;
 });
@@ -703,6 +715,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Có lỗi xảy ra khi khởi tạo CKEditor:", error);
     });
 });
+
 function getData(name) {
   return JSON.parse(localStorage.getItem(name)) || data.users;
 }
