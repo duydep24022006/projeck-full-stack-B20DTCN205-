@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch((error) => console.error("Fetch error:", error));
 });
+
 document.querySelector(".top-trello").addEventListener("click", toggleMenu);
 function toggleMenu() {
   let frameContainerBackground = document.querySelector(
@@ -113,7 +114,6 @@ document.getElementById("text-Close").addEventListener("click", function () {
         return;
       }
       index.is_closet = true;
-      console.log(index.is_closet);
       const userIndex = users.findIndex(
         (u) => u.username === currentUser.username
       );
@@ -166,7 +166,7 @@ function renderBoard() {
               }')"/>
             </div>
           </div>
-          <div class="content"> 
+          <div class="content">
             ${
               list.tasks && list.tasks.length
                 ? list.tasks
@@ -191,7 +191,6 @@ function renderBoard() {
             }
           </div>
           <div class="footer">
-
             <div class="topContainer top-left "onclick="showInputAddCardName('${
               list.id
             }')">
@@ -269,8 +268,8 @@ function renderYourBoards() {
         <p>${board.title}</p>
       </div>
     `;
-    
-      boardContainer.innerHTML += html;
+
+    boardContainer.innerHTML += html;
   });
 }
 
@@ -472,7 +471,6 @@ function handleUpdateListTitle(event) {
     let input = event.target;
     let newTitle = input.value.trim();
     let index = input.getAttribute("data-index");
-
     if (newTitle) {
       updateListTitle(index, newTitle);
     }
@@ -553,7 +551,22 @@ function showTaskDetailModal(title, idTasks, idLists) {
   selectedListsId = idLists;
   selectedTasksId = idTasks;
   let TaskDetailModal = document.querySelector(".Task-Detail-Modal");
+  let statusTasksBtn = document.getElementById("statusTasksBtn");
+  let currentBoard = currentUser.boards.find((b) => b.id == boardId);
+  if (!currentBoard) {
+    console.error("Board not found");
+    return;
+  }
+
+  let currentList = currentBoard.lists.find((l) => l.id == selectedListsId);
+  let TaskIndex = currentList.tasks.findIndex((t) => t.id == selectedTasksId);
+
+  statusTasksBtn.innerHTML = currentList.tasks[TaskIndex]
+    ? '<img src="../assets/img/check_circle.png" width="16" height="16" alt="..." />'
+    : '<img src="../assets/icon/Img - Incomplete.svg" width="16" height="16" alt="..." />';
+
   document.getElementById("nameCardchilden").innerText = title;
+
   let body = document.body;
   if (
     TaskDetailModal.style.display === "none" ||
@@ -566,7 +579,6 @@ function showTaskDetailModal(title, idTasks, idLists) {
     body.classList.remove("body-color");
   }
 }
-
 function hidenTaskDetailModal() {
   let body = document.body;
   let TaskDetailModal = document.querySelector(".Task-Detail-Modal");
@@ -576,6 +588,9 @@ function hidenTaskDetailModal() {
     myEditor.setData("");
   }
 }
+document, getElementById("statusTasksBtn").addEventListener("click", function () {
+  
+})
 function DeleteTasksCard() {
   Swal.fire({
     title: "Are you sure?",
@@ -595,14 +610,17 @@ function DeleteTasksCard() {
         console.error("Board not found");
         return;
       }
+
       let currentList = currentBoard.lists.find((l) => l.id == selectedListsId);
       let TaskIndex = currentList.tasks.findIndex(
         (t) => t.id == selectedTasksId
       );
+
       currentList.tasks.splice(TaskIndex, 1);
       const userIndex = users.findIndex(
         (u) => u.username === currentUser.username
       );
+
       if (userIndex !== -1) users[userIndex] = currentUser;
       setData("users", users);
       setData("currentUser", currentUser);
@@ -617,6 +635,15 @@ function DeleteTasksCard() {
     }
   });
 }
+
+document.getElementById("starredBoards").addEventListener("click", function () {
+  window.location.href = `./Starred-Boards.html`;
+});
+
+document.getElementById("closedBoards").addEventListener("click", function () {
+  window.location.href = `./Closed-Boards.html`;
+});
+
 document
   .getElementById("DeleteTasksCard")
   .addEventListener("click", DeleteTasksCard);
