@@ -592,14 +592,16 @@ body.body-color::before {
         margin-top: 20px;
         margin-left: 50px;
     }
-
-        .main-boards-bottom {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 17px;
-            margin-top: 33px;
-            margin-left: 150px;
-    
+    .main-boards-bottom {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 17px;
         }
+    .add-List-container .add-List-Input {
+        position: absolute;
+        top: 150px;
+        left:-290px;
+        display: none;
+    }
 
 }

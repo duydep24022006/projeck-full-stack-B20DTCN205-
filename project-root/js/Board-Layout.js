@@ -53,6 +53,9 @@ let selectedTasksId = null;
 
 const urlParams = new URLSearchParams(window.location.search);
 const boardId = urlParams.get("boardId");
+if (!boardId) {
+  window.location.href = "../index.html";
+}
 let currentUser = getData("currentUser");
 let boardsTitle = currentUser.boards.filter((board) => boardId == board.id);
 
