@@ -1,29 +1,138 @@
-<header>
-    <h1>Website của tôi</h1>
-    <nav>
-        <ul>
-            <li><a href="index.html">Trang chủ</a></li>
-            <li><a href="pages/about.html">Giới thiệu</a></li>
-            <li><a href="pages/contact.html">Liên hệ</a></li>
-        </ul>
-    </nav>
-</header>
-
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Header Trello</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Single Day Calendar</title>
     <link
+      href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
     />
     <style>
-      
+      body {
+        font-family: "Inter", sans-serif;
+        background: #f4f6f8;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .container__months {
+      box-shadow: none !important;
+      margin: 10px;
+    }
+      .calendar-container {
+        background: #fff;
+        border: 1px solid #2684ff;
+        border-radius: 8px;
+        width: 300px;
+        padding: 12px 16px;
+      }
+
+      .calendar-header {
+        font-weight: 600;
+        margin-bottom: 12px;
+        text-align: center;
+      }
+
+      .form-group {
+        margin-top: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .form-group input[type="text"] {
+        flex: 1;
+        padding: 6px 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 13px;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        font-weight: bold;
+        font-size: 14px;
+        border: none;
+        border-radius: 4px;
+        margin-top: 16px;
+        cursor: pointer;
+      }
+
+      #saveBtn {
+        background-color: #0079bf;
+        color: white;
+      }
+
+      #removeBtn {
+        background-color: #ebecf0;
+        color: #172b4d;
+      }
     </style>
   </head>
+  <body>
+    <div class="calendar-container">
+      <div class="calendar-header">Dates</div>
+      <div id="inline-picker"></div>
+
+      <label for="Start date">Start date</label> <br />
+      <div class="form-group">
+        <input type="checkbox" id="startCheckbox" checked />
+        <input
+          type="text"
+          id="startDateInput"
+          placeholder="Start date"
+          readonly
+        />
+      </div>
+      <label for="Due date">Due date</label>
+      <div class="form-group">
+        <input type="checkbox" id="startCheckbox" checked />
+        <input
+          type="text"
+          id="startDateInput"
+          placeholder="Start date"
+          readonly
+        />
+        <input
+          type="text"
+          id="startDateInput"
+          placeholder="Start date"
+          readonly
+        />
+      </div>
+
+      <button id="saveBtn">Save</button>
+      <button id="removeBtn">Remove</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/bundle.js"></script>
+    <script>
+      const picker = new Litepicker({
+        element: document.getElementById("inline-picker"),
+        inlineMode: true,
+        singleMode: true,
+        autoApply: true,
+        format: "YYYY-MM-DD",
+        setup: (picker) => {
+          picker.on("selected", (date) => {
+            if (document.getElementById("startCheckbox").checked) {
+              document.getElementById("startDateInput").value =
+                date.format("YYYY-MM-DD");
+            }
+          });
+        },
+      });
+
+      document.getElementById("removeBtn").onclick = () => {
+        document.getElementById("startDateInput").value = "";
+        picker.clearSelection();
+      };
+
+      document.getElementById("saveBtn").onclick = () => {
+        const start = document.getElementById("startDateInput").value;
+        alert(`Đã lưu Start date: ${start}`);
+      };
+    </script>
+  </body>
+</html>

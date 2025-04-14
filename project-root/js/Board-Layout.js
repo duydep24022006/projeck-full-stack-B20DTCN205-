@@ -693,6 +693,7 @@ document
       }, 3000);
       return;
     }
+    hidenTaskDetailModal();
   });
 document.getElementById("starredBoards").addEventListener("click", function () {
   window.location.href = `./Starred-Boards.html`;
@@ -708,6 +709,7 @@ document
 document
   .getElementById("cancelBtnTask")
   .addEventListener("click", hidenTaskDetailModal);
+
 let myEditor;
 document.addEventListener("DOMContentLoaded", function () {
   ClassicEditor.create(document.querySelector("#editorInput"))

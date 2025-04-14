@@ -307,8 +307,42 @@
             </div>
           </div>
         </div>
-        
       </div>
+      <div class="calendar-container">
+      <div class="calendar-header">Dates</div>
+      <div id="inline-picker"></div>
+
+      <label for="Start date">Start date</label> <br />
+      <div class="form-group">
+        <input type="checkbox" id="startCheckbox" checked />
+        <input
+          type="text"
+          id="startDateInput"
+          placeholder="Start date"
+          readonly
+        />
+      </div>
+      <label for="Due date">Due date</label>
+      <div class="form-group">
+        <input type="checkbox" id="startCheckbox" checked />
+        <input
+          type="text"
+          id="startDateInput"
+          placeholder="Start date"
+          readonly
+        />
+        <input
+          type="text"
+          id="startDateInput"
+          placeholder="Start date"
+          readonly
+        />
+      </div>
+
+      <button id="saveBtn">Save</button>
+      <button id="removeBtn">Remove</button>
+    </div>
+
     </div>
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
     <script src="../js/Board-Layout.js"></script>
