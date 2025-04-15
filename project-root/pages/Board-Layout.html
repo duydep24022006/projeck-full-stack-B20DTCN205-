@@ -11,6 +11,10 @@
       crossorigin="anonymous"
     />
     <link
+      href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css"
+      rel="stylesheet"
+    />
+    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
       integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
@@ -77,9 +81,7 @@
                     alt="..."
                   />
                 </div>
-                <div class="content">
-                  
-                </div>
+                <div class="content"></div>
               </div>
             </div>
           </div>
@@ -266,9 +268,15 @@
             </div>
             <div class="left-bottom">
               <textarea id="editorInput"></textarea>
-               <div id="messSaveTaskValidate"></div>
-              <button type="button" class="btn btn-primary me-2" id="saveTaskDetailModal">Save</button>
-             
+              <div id="messSaveTaskValidate"></div>
+              <button
+                type="button"
+                class="btn btn-primary me-2"
+                id="saveTaskDetailModal"
+              >
+                Save
+              </button>
+
               <button
                 type="button"
                 class="btn btn-link text-secondary text-decoration-none"
@@ -280,7 +288,7 @@
           </div>
           <div class="Section-conten-rigth">
             <div class="rigth-top">
-              <button class="btn-rigth">
+              <button class="btn-rigth" id="labelBtn">
                 <img
                   src="../assets/icon/Vector (1).svg"
                   width="16"
@@ -289,7 +297,7 @@
                 />
                 Labels
               </button>
-              <button class="btn-rigth">
+              <button class="btn-rigth" id="dueDateBtn">
                 <img
                   src="../assets/icon/Frame (4).svg"
                   width="16"
@@ -308,42 +316,156 @@
           </div>
         </div>
       </div>
+      <div class="Task-Detail-Labels">
+        <div class="Labels-header">
+          <p>Labels</p>
+          <img
+            src="../assets/icon/SVG.svg"
+            width="16"
+            height="16"
+            alt="..."
+            id="hidenLabel"
+          />
+        </div>
+        <div class="Labels-conten-top">
+          <p>Labels</p>
+        </div>
+        <div class="Labels-conten-main">
+          <input type="checkbox" id="checkbox" />
+          <div class="Labels-tag">done</div>
+          <span
+            id="editlabelbtn"
+            ><i class="fa-solid fa-pencil"></i
+          ></span>
+        </div>
+        <button type="button" class="btn btn-light" id="Create-a-new-label">
+          Create a new label
+        </button>
+      </div>
+      <div class="Add-label-dropdown">
+        <div class="label-dropdown-header">
+          <i class="fa-solid fa-chevron-left" id="extiNewEditlabel"></i>
+          <p class="Create-label-layout">Create label</p>
+          <p class="Edit-label-layout">Edit label</p>
+          <img
+            src="../assets/icon/SVG.svg"
+            width="16"
+            height="16"
+            alt="..."
+            id="extiNewEditlabel2"
+          />
+        </div>
+        <div class="label-dropdown-conten">
+          <label for="Title">Title</label> <br />
+          <input type="text" id="label-dropdown-conten-title" />
+          <label for="Select a color">Select a color</label>
+          <div class="color-option">
+            <div class="color-option-child item1"></div>
+            <div class="color-option-child item2"></div>
+            <div class="color-option-child item3"></div>
+            <div class="color-option-child item4"></div>
+            <div class="color-option-child item5"></div>
+            <div class="color-option-child item6"></div>
+            <div class="color-option-child item7"></div>
+            <div class="color-option-child item8"></div>
+            <div class="color-option-child item9"></div>
+            <div class="color-option-child item10"></div>
+          </div>
+        </div>
+        <div class="Create-label-layout label-layout-btn">
+          <button type="button" class="btn btn-primary btn-label-container">
+            Create
+          </button>
+        </div>
+        <div class="Edit-label-layout label-layout-btn">
+          <button type="button" class="btn btn-primary btn-label-container">
+            Save
+          </button>
+          <button type="button" class="btn btn-danger btn-label-container">
+            Delete
+          </button>
+        </div>
+      </div>
+      <div id="MovefunctionDropdown" class="Move-function-Dropdown">
+        <div class="modal-container">
+          <div class="modal-header">
+            <p>Dates</p>
+            <i class="fa-regular fa-x"></i>
+          </div>
+          <p class="modal-subtitle">Select destination</p>
+
+          <label for="boardInput" class="form-label">Board</label>
+          <input
+            type="text"
+            id="boardInput"
+            class="form-input"
+            value="Tổ chức sự kiện Year-end party !"
+            readonly
+          />
+          <div class="form-row">
+            <div class="form-column">
+              <label for="listSelect" class="form-label">List</label>
+              <select id="listSelect" class="form-select">
+                <option>Đang tiến hành</option>
+                <option>Việc cần làm</option>
+                <option>Hoàn thành</option>
+              </select>
+            </div>
+            <div class="form-column">
+              <label for="positionSelect" class="form-label">Position</label>
+              <select id="positionSelect" class="form-select">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary" id="moveCardBtn">
+            Move
+          </button>
+        </div>
+      </div>
       <div class="calendar-container">
-      <div class="calendar-header">Dates</div>
-      <div id="inline-picker"></div>
-
-      <label for="Start date">Start date</label> <br />
-      <div class="form-group">
-        <input type="checkbox" id="startCheckbox" checked />
-        <input
-          type="text"
-          id="startDateInput"
-          placeholder="Start date"
-          readonly
-        />
+        <div class="calendar-header">
+          <p>Dates</p>
+          <i class="fa-regular fa-x" id="hidenDuedate"></i>
+        </div>
+        <div id="inline-picker"></div>
+        <label for="Start date" class="label-form">Start date</label> <br />
+        <div class="Start-form-group form-group">
+          <input type="checkbox" id="startCheckbox" checked />
+          <input
+            type="text"
+            id="startDateInput"
+            placeholder=" M/D/YYYY"
+            readonly
+          />
+        </div>
+        <label for="Due date" class="label-form">Due date</label>
+        <div class="Due-form-group form-group">
+          <input type="checkbox" id="endCheckbox" />
+          <input
+            type="text"
+            id="endDateInput"
+            placeholder=" M/D/YYYY"
+            readonly
+          />
+          <input
+            type="text"
+            id="endTimerInput"
+            placeholder=" h:mm a"
+            readonly
+          />
+        </div>
+        <button type="button" class="btn btn-primary" id="saveDateBtn">
+          Save
+        </button>
+        <button type="button" class="btn btn-light" id="removeDateBtn">
+          Remove
+        </button>
       </div>
-      <label for="Due date">Due date</label>
-      <div class="form-group">
-        <input type="checkbox" id="startCheckbox" checked />
-        <input
-          type="text"
-          id="startDateInput"
-          placeholder="Start date"
-          readonly
-        />
-        <input
-          type="text"
-          id="startDateInput"
-          placeholder="Start date"
-          readonly
-        />
-      </div>
-
-      <button id="saveBtn">Save</button>
-      <button id="removeBtn">Remove</button>
     </div>
-
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/bundle.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
     <script src="../js/Board-Layout.js"></script>
     <script

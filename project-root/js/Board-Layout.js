@@ -36,6 +36,7 @@ const data = {
                       id: 401, // ID của thẻ
                       content: "Urgent", // Nội dung thẻ
                       color: "#fff", // Màu sắc của thẻ
+                      title: "123",
                     },
                   ],
                   created_at: "2025-02-28T13:30:00Z", // Thời gian tạo công việc
@@ -138,6 +139,14 @@ document.getElementById("text-Close").addEventListener("click", function () {
 document.getElementById("Boards").addEventListener("click", function () {
   window.location.href = "../index.html";
 });
+
+function getData(name) {
+  return JSON.parse(localStorage.getItem(name)) || data.users;
+}
+
+function setData(name, data) {
+  localStorage.setItem(name, JSON.stringify(data));
+}
 
 function renderBoard() {
   let currentUser = getData("currentUser");
@@ -681,20 +690,7 @@ function DeleteTasksCard() {
     }
   });
 }
-document
-  .getElementById("saveTaskDetailModal")
-  .addEventListener("click", function () {
-    let inputText = myEditor.getData().trim();
-    if (!inputText || inputText === "") {
-      const messageBox = document.getElementById("messSaveTaskValidate");
-      messageBox.innerHTML = `<p style="font-style: italic; color:red;">No description provided.</p>`;
-      setTimeout(() => {
-        messageBox.innerHTML = "";
-      }, 3000);
-      return;
-    }
-    hidenTaskDetailModal();
-  });
+
 document.getElementById("starredBoards").addEventListener("click", function () {
   window.location.href = `./Starred-Boards.html`;
 });
@@ -720,11 +716,312 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Có lỗi xảy ra khi khởi tạo CKEditor:", error);
     });
 });
+const picker = new Litepicker({
+  element: document.getElementById("inline-picker"),
+  inlineMode: true,
+  singleMode: true,
+  autoApply: true,
+  showTime: true,
+  timeFormat: "HH:mm",
+  format: "YYYY-MM-DD HH:mm",
+  setup: (picker) => {
+    picker.on("selected", (dateObj) => {
+      try {
+        const date = dateObj.dateInstance;
+        if (!(date instanceof Date) || isNaN(date.getTime())) return;
 
-function getData(name) {
-  return JSON.parse(localStorage.getItem(name)) || data.users;
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+
+        const ampm = hours >= 12 ? "PM" : "AM";
+        const formattedHours = hours % 12 || 12;
+
+        if (document.getElementById("startCheckbox").checked) {
+          document.getElementById(
+            "startDateInput"
+          ).value = `${month}-${day}-${year}`;
+        }
+
+        if (document.getElementById("endCheckbox").checked) {
+          document.getElementById(
+            "endDateInput"
+          ).value = `${month}-${day}-${year}`;
+          document.getElementById(
+            "endTimerInput"
+          ).value = `${formattedHours}:${minutes} ${ampm}`;
+        }
+      } catch (error) {
+        console.error("Lỗi xử lý ngày:", error);
+      }
+    });
+  },
+});
+
+const toggleInputState = (checkboxId, inputIds) => {
+  const checkbox = document.getElementById(checkboxId);
+  const inputs = inputIds.map((id) => document.getElementById(id));
+
+  const updateState = () => {
+    const isChecked = checkbox.checked;
+    inputs.forEach((input) => (input.disabled = !isChecked));
+  };
+
+  checkbox.addEventListener("change", updateState);
+  updateState();
+};
+
+toggleInputState("startCheckbox", ["startDateInput"]);
+toggleInputState("endCheckbox", ["endDateInput", "endTimerInput"]);
+
+document
+  .getElementById("startDateInput")
+  .addEventListener("input", function () {
+    if (this.value && document.getElementById("endCheckbox").checked) {
+      const [month, day, year] = this.value.split("-").map(Number);
+      if (month >= 1 && month <= 12 && day >= 1 && day <= 31 && year > 0) {
+        const newDate = new Date(year, month - 1, day);
+        picker.setDate(newDate);
+      }
+    }
+  });
+
+document.getElementById("endTimerInput").addEventListener("input", function () {
+  if (this.value && document.getElementById("endCheckbox").checked) {
+    const [time, modifier] = this.value.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+
+    // Validate giờ/phút
+    if (hours < 1 || hours > 12 || minutes < 0 || minutes > 59) return;
+
+    // Chuyển đổi sang 24h
+    if (modifier === "PM" && hours !== 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    const currentDate = picker.getDate();
+    if (currentDate && !isNaN(currentDate.getTime())) {
+      currentDate.setHours(hours);
+      currentDate.setMinutes(minutes);
+      picker.setDate(currentDate);
+    }
+  }
+});
+
+const getInputValues = () => {
+  try {
+    const endDate = document.getElementById("endDateInput").value;
+    const endTime = document.getElementById("endTimerInput").value;
+    const dateRegex = /^\d{1,2}-\d{1,2}-\d{4}$/;
+    const timeRegex = /^(1[0-2]|0?[1-9]):[0-5][0-9] [AP]M$/;
+    if (!dateRegex.test(endDate) || !timeRegex.test(endTime)) {
+      throw new Error(
+        "Vui lòng nhập đúng định dạng (VD: 03-05-2025 và 11:59 PM)"
+      );
+    }
+
+    const [month, day, year] = endDate.split("-").map(Number);
+    const [time, modifier] = endTime.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+
+    if (
+      month < 1 ||
+      month > 12 ||
+      day < 1 ||
+      day > 31 ||
+      hours < 1 ||
+      hours > 12 ||
+      minutes < 0 ||
+      minutes > 59
+    ) {
+      throw new Error("Giá trị không hợp lệ (VD: 31-04-2023 không tồn tại)");
+    }
+    if (modifier === "PM" && hours !== 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    const dateUTC = new Date(Date.UTC(year, month - 1, day, hours, minutes));
+    if (isNaN(dateUTC.getTime())) throw new Error("Ngày/giờ không hợp lệ");
+
+    return {
+      due_date: dateUTC.toISOString(),
+    };
+  } catch (error) {
+    console.error("Lỗi:", error.message);
+    return { startDate: "", due_date: "" };
+  }
+};
+
+function ShowTimerDueDate() {
+  let calendarContainer = document.querySelector(".calendar-container");
+
+  if (
+    calendarContainer.style.display === "none" ||
+    calendarContainer.style.display === ""
+  ) {
+    calendarContainer.style.display = "block";
+  } else {
+    calendarContainer.style.display = "none";
+  }
 }
 
-function setData(name, data) {
-  localStorage.setItem(name, JSON.stringify(data));
+function showTaskDetailLabels() {
+  let TaskDetailLabels = document.querySelector(".Task-Detail-Labels");
+
+  if (
+    TaskDetailLabels.style.display === "none" ||
+    TaskDetailLabels.style.display === ""
+  ) {
+    TaskDetailLabels.style.display = "block";
+  } else {
+    TaskDetailLabels.style.display = "none";
+  }
+}
+function showAddLabelDropdown() {
+  let addLabelDropdown = document.querySelector(".Add-label-dropdown");
+
+  if (
+    addLabelDropdown.style.display === "none" ||
+    addLabelDropdown.style.display === ""
+  ) {
+    addLabelDropdown.style.display = "block";
+  } else {
+    addLabelDropdown.style.display = "none";
+  }
+}
+function showEditLabelDropdown() {
+  let addLabelDropdown = document.querySelector(".Add-label-dropdown");
+  const createLabelLayout = document.querySelectorAll(".Create-label-layout");
+  const editLabelLayout = document.querySelectorAll(".Edit-label-layout");
+  if (
+    addLabelDropdown.style.display === "none" ||
+    addLabelDropdown.style.display === ""
+  ) {
+    addLabelDropdown.style.display = "block";
+    createLabelLayout.forEach((el) => {
+      el.style.display = "none";
+    });
+    editLabelLayout.forEach((el) => {
+      el.style.display = "block";
+    });
+  } else {
+    addLabelDropdown.style.display = "none";
+    addLabelDropdown.style.display = "block";
+    createLabelLayout.forEach((el) => {
+      el.style.display = "block";
+    });
+    editLabelLayout.forEach((el) => {
+      el.style.display = "none";
+    });
+  }
+}
+document
+  .getElementById("dueDateBtn")
+  .addEventListener("click", ShowTimerDueDate);
+document
+  .getElementById("hidenDuedate")
+  .addEventListener("click", ShowTimerDueDate);
+document
+  .getElementById("labelBtn")
+  .addEventListener("click", showTaskDetailLabels);
+document
+  .getElementById("hidenLabel")
+  .addEventListener("click", showTaskDetailLabels);
+document
+  .getElementById("Create-a-new-label")
+  .addEventListener("click", showAddLabelDropdown);
+document.getElementById("extiNewEditlabel").addEventListener("click", () => {
+  showEditLabelDropdown();
+  showAddLabelDropdown();
+});
+document.getElementById("extiNewEditlabel2").addEventListener("click", () => {
+  showEditLabelDropdown();
+  showAddLabelDropdown();
+});
+document
+  .getElementById("editlabelbtn")
+  .addEventListener("click", showEditLabelDropdown);
+
+document.getElementById("saveDateBtn").addEventListener("click", () => {
+  const values = getInputValues();
+  setData("due-date", values);
+  ShowTimerDueDate();
+});
+document.getElementById("removeDateBtn").addEventListener("click", () => {
+  document.getElementById("startDateInput").value = "";
+  document.getElementById("endDateInput").value = "";
+  document.getElementById("endTimerInput").value = "";
+});
+document
+  .getElementById("saveTaskDetailModal")
+  .addEventListener("click", async function () {
+    try {
+      const inputText = myEditor.getData().trim();
+      const messageBox = document.getElementById("messSaveTaskValidate");
+
+      if (!inputText) {
+        showValidationError(messageBox, "No description provided.");
+        return;
+      }
+
+      const currentUser = getData("currentUser");
+      const users = getData("users");
+      const dueDate = getData("due-date");
+
+      if (!currentUser || !users || !dueDate) {
+        throw new Error("Missing critical data");
+      }
+
+      const currentBoard = currentUser.boards.find((b) => b.id == boardId);
+      if (!currentBoard) {
+        throw new Error("Board not found");
+      }
+
+      const currentList = currentBoard.lists.find(
+        (l) => l.id == selectedListsId
+      );
+      if (!currentList) {
+        throw new Error("List not found");
+      }
+
+      const taskIndex = currentList.tasks.findIndex(
+        (t) => t.id == selectedTasksId
+      );
+      if (taskIndex === -1) {
+        throw new Error("Task not found");
+      }
+
+      const updatedTask = {
+        ...currentList.tasks[taskIndex],
+        description: inputText,
+        due_date: dueDate.due_date,
+      };
+
+      currentList.tasks[taskIndex] = updatedTask;
+
+      const userIndex = users.findIndex((u) => u.id === currentUser.id);
+      if (userIndex !== -1) {
+        users[userIndex] = currentUser;
+      }
+      await setData("users", users);
+      await setData("currentUser", currentUser);
+      renderBoard();
+      hidenTaskDetailModal();
+    } catch (error) {
+      console.error("Error saving task:", error);
+      showErrorMessage(error.message);
+    }
+  });
+
+function showValidationError(container, message) {
+  container.innerHTML = `<p style="font-style: italic; color: red;">${message}</p>`;
+  setTimeout(() => (container.innerHTML = ""), 3000);
+}
+
+function showErrorMessage(message) {
+  const errorContainer = document.getElementById("error-messages");
+  if (errorContainer) {
+    errorContainer.innerHTML = `<div class="alert">${message}</div>`;
+    setTimeout(() => (errorContainer.innerHTML = ""), 5000);
+  }
 }
