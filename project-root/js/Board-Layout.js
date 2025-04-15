@@ -1025,3 +1025,7 @@ function showErrorMessage(message) {
     setTimeout(() => (errorContainer.innerHTML = ""), 5000);
   }
 }
+
+function rendertags() {
+  
+}
